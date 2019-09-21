@@ -1,0 +1,28 @@
+#tabPaneOuter {
+    -fx-background-color: #CCFF99;
+    -fx-font-family: Verdana;
+    -fx-font-size: 12px;
+}
+
+#addProductBtn {
+    -fx-background-radius: 50px;
+    -fx-border-radius: 50px;
+    -fx-border-width: 2px;
+    -fx-border-color: black;
+}
+
+#addProductBtn:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 1), 5, 0.0, 0, 0);
+}
+
+#recordProductBtn {
+    -fx-background-radius: 50px;
+    -fx-border-radius: 50px;
+    -fx-border-width: 2px;
+    -fx-border-color: black;
+}
+
+#recordProductBtn:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 1), 5, 0.0, 0, 0);
+}
+
