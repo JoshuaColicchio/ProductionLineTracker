@@ -1,4 +1,4 @@
-package database;
+package application;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,8 +9,8 @@ import java.sql.PreparedStatement;
  *
  * @author Joshua Colicchio
  */
-// I suppressed spelling warnings because it was throwing false warnings
-@SuppressWarnings("SpellCheckingInspection")
+
+// I'm aware of the 'Declaration access can be weaker' warning, but felt it wasn't important. Let me know if it is.
 public class DatabaseManager {
 
   private static final String H2_DRIVER = "org.h2.Driver";
