@@ -55,7 +55,6 @@ public class Controller {
       toolTipBox.show();
     } else { // We don't have to check the itemType selection because it defaults to Audio, so it'll
       // never be null.
-      // @TODO add new product to database
       DatabaseManager.addProduct(
           productNameTextField.getText(),
           manufacturerTextField.getText(),
@@ -78,6 +77,7 @@ public class Controller {
     itemTypeChoiceBox.getSelectionModel().selectFirst();
 
     // PRODUCE TAB
+    // set up combo box items
     chooseQuantityComboBox.setItems(
         FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
     chooseQuantityComboBox.setEditable(true);

@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
  *
  * @author Joshua Colicchio
  */
+// I suppressed spelling warnings because it was throwing false warnings
 @SuppressWarnings("SpellCheckingInspection")
 public class DatabaseManager {
 
@@ -24,14 +25,13 @@ public class DatabaseManager {
    */
   public static void addProduct(String prodName, String manuName, String itemType) {
     try {
+      // establish connection
       Class.forName(H2_DRIVER);
       Connection connection = DriverManager.getConnection(H2_URL);
 
+      // ensure valid connection
       if (connection != null) {
         // build query using prepared statement object
-        // For now I don't need the generated key, but I'm catching it for future use because most
-        // likely
-        // I'll be using it in the near future.
         PreparedStatement pstmt =
             connection.prepareStatement(
                 "INSERT INTO PRODUCT (NAME, TYPE, MANUFACTURER) VALUES (?,?,?)",
