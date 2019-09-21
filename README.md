@@ -73,4 +73,8 @@ In addition to the ability to record production, the software also needs the abi
         -   Future potential employers
         -   Professor
 -   **Timelines** (a breakdown of the Product Backlog into time-bound smaller, more detailed tasks in Sprint Backlogs)
-    -   Three 5-week sprints, detailed below.
+    -   Three 5-week sprints, detailed below.  
+    
+  
+# Class Diagram for Sprint 1
+![Alt text](https://github.com/JoshuaColicchio/ProductionLineTracker/blob/master/Package%20application.png?raw=true "Class Diagram Sprint 1")  
