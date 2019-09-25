@@ -46,10 +46,11 @@
             <Label alignment="CENTER" layoutX="16.0" layoutY="177.0" prefHeight="17.0" prefWidth="566.0"
                    text="Existing Products"/>
             <TableView fx:id="existingProductsTableView" layoutX="16.0" layoutY="198.0" prefHeight="158.0"
-                       prefWidth="568.0">
+                       prefWidth="570.0">
                 <columns>
-                    <TableColumn prefWidth="75.0" text="C1"/>
-                    <TableColumn prefWidth="75.0" text="C2"/>
+                    <TableColumn fx:id="existingProdName" prefWidth="190.0" text="Product Name"/>
+                    <TableColumn fx:id="existingProdManu" prefWidth="190.0" text="Manufacturer"/>
+                    <TableColumn fx:id="existingProdType" prefWidth="190.0" text="Type"/>
                 </columns>
             </TableView>
         </AnchorPane>

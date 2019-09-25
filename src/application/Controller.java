@@ -2,15 +2,8 @@ package application;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 /**
  * Controller class used to manage GUI object interactions.
@@ -30,7 +23,13 @@ public class Controller {
 
   @FXML private Button addProductBtn;
 
-  @FXML private TableView<?> existingProductsTableView;
+  @FXML private TableView<Product> existingProductsTableView;
+
+  @FXML private TableColumn existingProdName;
+
+  @FXML private TableColumn existingProdManu;
+
+  @FXML private TableColumn existingProdType;
 
   @FXML private ListView<?> chooseProductListView;
 
@@ -54,10 +53,13 @@ public class Controller {
       toolTipBox.show();
     } else { // We don't have to check the itemType selection because it defaults to Audio, so it'll
       // never be null.
-      DatabaseManager.addProduct(
+      /*DatabaseManager.addProduct(
           productNameTextField.getText(),
           manufacturerTextField.getText(),
-          itemTypeChoiceBox.getValue());
+          itemTypeChoiceBox.getValue()); */
+      addToExistingProducts(new Widget(productNameTextField.getText(),
+              manufacturerTextField.getText(),
+              itemTypeChoiceBox.getValue()));
     }
   }
 
@@ -71,9 +73,15 @@ public class Controller {
   public void initialize() {
     // PRODUCT LINE TAB
     // set up item type choice box
-    String[] itemTypes = {"Audio", "Visual", "AudioMobile", "VisualMobile"};
-    itemTypeChoiceBox.setItems(FXCollections.observableArrayList(itemTypes));
+    for (ItemType type : ItemType.values()) {
+      itemTypeChoiceBox.getItems().add(type.toString());
+    }
     itemTypeChoiceBox.getSelectionModel().selectFirst();
+
+    // set up existing products
+    existingProdName.setCellValueFactory(new PropertyValueFactory("name"));
+    existingProdManu.setCellValueFactory(new PropertyValueFactory("manufacturer"));
+    existingProdType.setCellValueFactory(new PropertyValueFactory("type"));
 
     // PRODUCE TAB
     // set up combo box items
@@ -85,5 +93,9 @@ public class Controller {
     // UNIVERSAL
     // set up alert box
     toolTipBox = new Alert(Alert.AlertType.WARNING);
+  }
+
+  public void addToExistingProducts(Product product) {
+      existingProductsTableView.getItems().add(product);
   }
 }
