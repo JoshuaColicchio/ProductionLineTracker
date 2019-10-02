@@ -23,7 +23,7 @@ public class Main extends Application {
   public void start(Stage primaryStage) throws Exception {
     Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
     primaryStage.setTitle("Production Tracker");
-    Scene scene = new Scene(root, 800, 400);
+    Scene scene = new Scene(root, 600, 400);
     scene.getStylesheets().add(Main.class.getResource("stylesheet.css").toExternalForm());
     primaryStage.setScene(scene);
     primaryStage.show();
