@@ -54,13 +54,20 @@ public class Controller {
     } else { // We don't have to check the itemType selection because it defaults to Audio, so it'll
       // never be null.
       /*DatabaseManager.addProduct(
-          productNameTextField.getText(),
-          manufacturerTextField.getText(),
-          itemTypeChoiceBox.getValue()); */
-      addToExistingProducts(new Widget(productNameTextField.getText(),
+      productNameTextField.getText(),
+      manufacturerTextField.getText(),
+      itemTypeChoiceBox.getValue()); */
+      addToExistingProducts(
+          new Widget(
+              productNameTextField.getText(),
               manufacturerTextField.getText(),
               itemTypeChoiceBox.getValue()));
     }
+
+    // Clear out the fields after use.
+    productNameTextField.setText("");
+    manufacturerTextField.setText("");
+    itemTypeChoiceBox.getSelectionModel().selectFirst();
   }
 
   /** Method that is called when the "Record Product" button is pressed. */
@@ -96,6 +103,6 @@ public class Controller {
   }
 
   public void addToExistingProducts(Product product) {
-      existingProductsTableView.getItems().add(product);
+    existingProductsTableView.getItems().add(product);
   }
 }
