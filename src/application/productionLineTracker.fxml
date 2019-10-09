@@ -48,9 +48,10 @@
             <TableView fx:id="existingProductsTableView" layoutX="16.0" layoutY="198.0" prefHeight="158.0"
                        prefWidth="570.0">
                 <columns>
-                    <TableColumn fx:id="existingProdName" prefWidth="190.0" text="Product Name"/>
-                    <TableColumn fx:id="existingProdManu" prefWidth="190.0" text="Manufacturer"/>
-                    <TableColumn fx:id="existingProdType" prefWidth="190.0" text="Type"/>
+                    <TableColumn fx:id="existingProdId" prefWidth="142.5" text="Product ID" />
+                    <TableColumn fx:id="existingProdName" prefWidth="142.5" text="Product Name"/>
+                    <TableColumn fx:id="existingProdManu" prefWidth="142.5" text="Manufacturer"/>
+                    <TableColumn fx:id="existingProdType" prefWidth="142.5" text="Type"/>
                 </columns>
             </TableView>
         </AnchorPane>

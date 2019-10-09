@@ -7,7 +7,8 @@ public abstract class Product implements Item {
     private String manufacturer;
     private String type;
 
-    public Product(String name, String manu, String type) {
+    public Product(int id, String name, String manu, String type) {
+        this.id = id;
         this.name = name;
         this.manufacturer = manu;
         this.type = type;

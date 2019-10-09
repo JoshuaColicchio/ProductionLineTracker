@@ -1,16 +1,12 @@
 package application;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.sql.*;
 
 /**
  * This is the database driver class. It handles all database interactions.
  *
  * @author Joshua Colicchio
  */
-
-// I'm aware of the 'Declaration access can be weaker' warning, but felt it wasn't important. Let me know if it is.
 public class DatabaseManager {
 
   private static final String H2_DRIVER = "org.h2.Driver";
@@ -23,7 +19,7 @@ public class DatabaseManager {
    * @param manuName Name of the manufacturer of the new product.
    * @param itemType Item type of the new product.
    */
-  public static void addProduct(String prodName, String manuName, String itemType) {
+  public static int addProduct(String prodName, String manuName, String itemType) {
     try {
       // establish connection
       Class.forName(H2_DRIVER);
@@ -42,6 +38,11 @@ public class DatabaseManager {
 
         // execute the query
         pstmt.executeUpdate();
+        ResultSet rs = pstmt.getGeneratedKeys();
+
+        while (rs.next()) {
+          return rs.getInt(1);
+        }
 
         // close connections
         pstmt.close();
@@ -57,5 +58,67 @@ public class DatabaseManager {
               + ")\nReason: "
               + ex.getLocalizedMessage());
     }
+    return -1;
+  }
+
+  public static ResultSet loadProducts() {
+    try {
+      // establish connection
+      Class.forName(H2_DRIVER);
+      Connection connection = DriverManager.getConnection(H2_URL);
+
+      // ensure valid connection
+      if (connection != null) {
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCT");
+
+        return rs;
+      }
+    } catch (Exception ex) {
+      System.out.println(ex.toString());
+    }
+    return null;
+  }
+
+  public static void saveProductionRecord(String quantity, String productId, String serialNum) {
+    try {
+      // establish connection
+      Class.forName(H2_DRIVER);
+      Connection connection = DriverManager.getConnection(H2_URL);
+
+      // ensure valid connection
+      if (connection != null) {
+        PreparedStatement pstmt = connection.prepareStatement(
+                "INSERT INTO PRODUCTIONRECORD (PRODUCTION_NUM, PRODUCT_ID, SERIAL_NUM, DATE_PRODUCED)" +
+                     " VALUES (?,?,?,?)");
+        pstmt.setString(1, quantity);
+        pstmt.setString(2, productId);
+        pstmt.setString(3, serialNum);
+        pstmt.setString(4, java.util.Calendar.getInstance().getTime().toString());
+
+        pstmt.executeUpdate();
+      }
+    } catch (Exception ex) {
+      System.out.println(ex.toString());
+    }
+  }
+
+  public static ResultSet loadProductionRecord() {
+    try {
+      // establish connection
+      Class.forName(H2_DRIVER);
+      Connection connection = DriverManager.getConnection(H2_URL);
+
+      // ensure valid connection
+      if (connection != null) {
+        Statement stmt = connection.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM PRODUCTIONRECORD");
+
+        return rs;
+      }
+    } catch (Exception ex) {
+      System.out.println(ex.toString());
+    }
+    return null;
   }
 }

@@ -21,7 +21,7 @@ public class Main extends Application {
    */
   @Override
   public void start(Stage primaryStage) throws Exception {
-    Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
+    Parent root = FXMLLoader.load(getClass().getResource("productionLineTracker.fxml"));
     primaryStage.setTitle("Production Tracker");
     Scene scene = new Scene(root, 600, 400);
     scene.getStylesheets().add(Main.class.getResource("stylesheet.css").toExternalForm());
