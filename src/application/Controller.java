@@ -92,8 +92,6 @@ public class Controller {
     Product prod =
         productionCollection.get(chooseProductListView.getSelectionModel().getSelectedIndex());
 
-    System.out.println(prod.getName() + " " + prod.getId());
-
     if (productionLogTextArea.getText().isEmpty()) {
       productionLogTextArea.setText(
           "Product ID: "
@@ -115,16 +113,7 @@ public class Controller {
               + java.util.Calendar.getInstance().getTime().toString());
     }
     DatabaseManager.saveProductionRecord(
-        chooseQuantityComboBox.getValue(),
-        Integer.toString(
-            productionCollection
-                .get(
-                    chooseProductListView
-                        .getSelectionModel()
-                        .getSelectedItem()
-                        .indexOf(chooseProductListView.getSelectionModel().getSelectedItem()))
-                .getId()),
-        "0");
+        chooseQuantityComboBox.getValue(), Integer.toString(prod.getId()), "0");
   }
 
   /** Method that is called when the program launches which initializes some default values. */
@@ -233,7 +222,6 @@ public class Controller {
 
   public void addToExistingProducts(Product product) {
     existingProductsTableView.getItems().add(product);
-    productionCollection.add(product);
     chooseProductListView.getItems().add(product.getManufacturer() + " " + product.getName());
   }
 }
