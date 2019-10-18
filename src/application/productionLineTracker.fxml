@@ -16,6 +16,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
          prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.201"
          xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
@@ -48,10 +49,26 @@
             <TableView fx:id="existingProductsTableView" layoutX="16.0" layoutY="198.0" prefHeight="158.0"
                        prefWidth="570.0">
                 <columns>
-                    <TableColumn fx:id="existingProdId" prefWidth="142.5" text="Product ID" />
-                    <TableColumn fx:id="existingProdName" prefWidth="142.5" text="Product Name"/>
-                    <TableColumn fx:id="existingProdManu" prefWidth="142.5" text="Manufacturer"/>
-                    <TableColumn fx:id="existingProdType" prefWidth="142.5" text="Type"/>
+                    <TableColumn prefWidth="142.5" text="Product ID">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="id"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="142.5" text="Product Name">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="name"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="142.5" text="Manufacturer">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="manufacturer"/>
+                        </cellValueFactory>
+                    </TableColumn>
+                    <TableColumn prefWidth="142.5" text="Type">
+                        <cellValueFactory>
+                            <PropertyValueFactory property="type"/>
+                        </cellValueFactory>
+                    </TableColumn>
                 </columns>
             </TableView>
         </AnchorPane>
@@ -63,7 +80,7 @@
                       prefWidth="465.0"/>
             <Label alignment="CENTER" layoutY="98.0" prefHeight="17.0" prefWidth="115.0" text="Choose Quantity:"/>
             <ComboBox fx:id="chooseQuantityComboBox" layoutX="117.0" layoutY="94.0" prefHeight="25.0"
-                      prefWidth="464.0"/>
+                      prefWidth="464.0" editable="true"/>
             <Button layoutX="450.0" layoutY="132.0" mnemonicParsing="false"
                     onAction="#recordProductBtnPushed" text="Record Production"/>
         </AnchorPane>

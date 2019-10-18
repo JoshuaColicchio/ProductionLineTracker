@@ -1,10 +1,7 @@
 package application;
 
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,65 +11,45 @@ import java.util.HashMap;
  *
  * @author Joshua Colicchio
  */
-@SuppressWarnings("WeakerAccess")
 public class Controller {
 
-  @FXML private TabPane tabPaneOuter;
-
   @FXML private TextField productNameTextField;
-
   @FXML private TextField manufacturerTextField;
-
-  @FXML private ChoiceBox<String> itemTypeChoiceBox;
-
-  @FXML private Button addProductBtn;
-
+  @FXML private ChoiceBox<ItemType> itemTypeChoiceBox;
   @FXML private TableView<Product> existingProductsTableView;
-
-  @FXML private TableColumn existingProdId;
-
-  @FXML private TableColumn existingProdName;
-
-  @FXML private TableColumn existingProdManu;
-
-  @FXML private TableColumn existingProdType;
-
   @FXML private ListView<String> chooseProductListView;
-
   @FXML private ComboBox<String> chooseQuantityComboBox;
-
-  @FXML private Button recordProductBtn;
-
   @FXML private TextArea productionLogTextArea;
-
   private Alert toolTipBox;
-
-  private ArrayList<Product> productionCollection = new ArrayList<>();
+  private ArrayList<Product> productionArrayList = new ArrayList<>();
+  private HashMap<Integer, Product> productionHashMap = new HashMap<>();
 
   /** Method that is called when the "Add Product" button is pressed. */
   @FXML
   public void addProductBtnPushed() {
-    // Check to ensure all fields filled
-    if (productNameTextField.getText().trim().length() == 0) {
+    if (productNameTextField.getText().trim().isEmpty()) {
       toolTipBox.setContentText("\"Product Name\" must not be empty!");
       toolTipBox.show();
-    } else if (manufacturerTextField.getText().trim().length() == 0) {
+      return;
+    }
+
+    if (manufacturerTextField.getText().trim().isEmpty()) {
       toolTipBox.setContentText("\"Manufacturer\" must not be empty!");
       toolTipBox.show();
-    } else { // We don't have to check the itemType selection because it defaults to Audio, so it'll
-      // never be null.
-      int prodId =
-          DatabaseManager.addProduct(
-              productNameTextField.getText(),
-              manufacturerTextField.getText(),
-              itemTypeChoiceBox.getValue());
-      addToExistingProducts(
-          new Widget(
-              prodId,
-              productNameTextField.getText(),
-              manufacturerTextField.getText(),
-              itemTypeChoiceBox.getValue()));
+      return;
     }
+
+    int prodId =
+        DatabaseManager.addProduct(
+            productNameTextField.getText(),
+            manufacturerTextField.getText(),
+            itemTypeChoiceBox.getValue());
+    addToExistingProducts(
+        new Widget(
+            prodId,
+            productNameTextField.getText(),
+            manufacturerTextField.getText(),
+            itemTypeChoiceBox.getValue()));
 
     // Clear out the fields after use.
     productNameTextField.setText("");
@@ -89,138 +66,112 @@ public class Controller {
       return;
     }
 
-    Product prod =
-        productionCollection.get(chooseProductListView.getSelectionModel().getSelectedIndex());
+    try {
+      ProductionRecord productionRecord =
+          new ProductionRecord(
+              Integer.parseInt(chooseQuantityComboBox.getValue()),
+              productionArrayList.get(
+                  chooseProductListView.getSelectionModel().getSelectedIndex()));
 
-    if (productionLogTextArea.getText().isEmpty()) {
-      productionLogTextArea.setText(
-          "Product ID: "
-              + prod.getId()
-              + " | Serial Number: "
-              + "0"
-              + " | Quantity Produced: "
-              + chooseQuantityComboBox.getValue()
-              + " | Date Produced: "
-              + java.util.Calendar.getInstance().getTime().toString());
-    } else {
-      productionLogTextArea.appendText(
-          "\nProduct ID: "
-              + prod.getId()
-              + " | Serial Number: 0"
-              + " | Quantity Produced: "
-              + chooseQuantityComboBox.getValue()
-              + " | Date Produced: "
-              + java.util.Calendar.getInstance().getTime().toString());
+      productionRecord.setProductionNumber(DatabaseManager.saveProductionRecord(productionRecord));
+
+      if (productionLogTextArea.getText().trim().isEmpty()) {
+        productionLogTextArea.setText(productionRecord.toString());
+      } else productionLogTextArea.appendText("\n" + productionRecord.toString());
+    } catch (NumberFormatException nfe) {
+      toolTipBox.setContentText("Invalid Quantity!");
+      toolTipBox.show();
     }
-    DatabaseManager.saveProductionRecord(
-        chooseQuantityComboBox.getValue(), Integer.toString(prod.getId()), "0");
   }
 
-  /** Method that is called when the program launches which initializes some default values. */
+  /** Method that is called when the program launches which initializes all default values. */
   public void initialize() {
-    // <editor-fold desc="LOADING FROM DATABASE">
-    // <editor-fold desc="Load all existing products">
-    ResultSet allProducts = DatabaseManager.loadProducts();
-    if (allProducts != null) {
+    // Load all existing products from the database.
+    ResultSet products = DatabaseManager.loadProducts();
+    if (products != null) {
       try {
-        while (allProducts.next()) {
-          Product temp;
-          switch (allProducts.getString("TYPE")) {
+        while (products.next()) {
+          Product temp = null;
+          switch (products.getString("TYPE")) {
             case "Audio":
               temp =
                   new AudioPlayer(
-                      allProducts.getInt("ID"),
-                      allProducts.getString("NAME"),
-                      allProducts.getString("MANUFACTURER"),
-                      allProducts.getString("TYPE"),
+                      products.getInt("ID"),
+                      products.getString("NAME"),
+                      products.getString("MANUFACTURER"),
+                      products.getString("TYPE"),
                       "unknown atm");
-              addToExistingProducts(temp);
-              productionCollection.add(temp);
               break;
             case "Visual":
               temp =
                   new MoviePlayer(
-                      allProducts.getInt("ID"),
-                      allProducts.getString("NAME"),
-                      allProducts.getString("MANUFACTURER"),
+                      products.getInt("ID"),
+                      products.getString("NAME"),
+                      products.getString("MANUFACTURER"),
                       null,
                       null);
-              addToExistingProducts(temp);
-              productionCollection.add(temp);
               break;
             case "AudioMobile":
-              System.out.println("audiomobile");
-              break;
+              System.out.println("audiomobile has not been implemented yet");
+              return;
             case "VisualMobile":
-              System.out.println("visualmobile");
-              break;
+              System.out.println("visualmobile has not been implemented yet");
+              return;
             default:
-              break;
+              System.out.println("ERROR: Unknown product type: " + products.getString("TYPE"));
+              return;
           }
+          addToExistingProducts(temp);
         }
       } catch (Exception ex) {
         System.out.println(ex.toString());
       }
     }
-    // </editor-fold>
-    // <editor-fold desc="Load Production Record">
-    ResultSet productionRecord = DatabaseManager.loadProductionRecord();
-    if (productionRecord != null) {
+
+    // Load all existing product records from the database.
+    ResultSet records = DatabaseManager.loadProductionRecord();
+    if (records != null) {
       try {
-        while (productionRecord.next()) {
-          if (productionLogTextArea.getText().isEmpty()) {
-            productionLogTextArea.setText(
-                "Product ID: "
-                    + productionRecord.getString("PRODUCT_ID")
-                    + " | Serial Number: "
-                    + productionRecord.getString("SERIAL_NUM")
-                    + " | Quantity Produced: "
-                    + productionRecord.getString("PRODUCTION_NUM")
-                    + " | Date Produced: "
-                    + productionRecord.getString("DATE_PRODUCED"));
-            continue;
-          }
-          productionLogTextArea.appendText(
-              "\nProduct ID: "
-                  + productionRecord.getString("PRODUCT_ID")
-                  + " | Serial Number: "
-                  + productionRecord.getString("SERIAL_NUM")
-                  + " | Quantity Produced: "
-                  + productionRecord.getString("PRODUCTION_NUM")
-                  + " | Date Produced: "
-                  + productionRecord.getString("DATE_PRODUCED"));
+        while (records.next()) {
+          // Get the corresponding product & create a ProductionRecord instance.
+          Product prod = productionHashMap.get(records.getInt("PRODUCT_ID"));
+          ProductionRecord pr =
+              new ProductionRecord(
+                  records.getInt("QUANTITY_PRODUCED"),
+                  records.getString("SERIAL_NUM"),
+                  records.getLong("DATE_PRODUCED"),
+                  prod);
+          pr.setProductRef(productionHashMap.get(pr.getProductID()));
+          if (productionLogTextArea.getText().isEmpty())
+            productionLogTextArea.setText(pr.toString());
+          else productionLogTextArea.appendText("\n" + pr.toString());
         }
       } catch (Exception ex) {
         System.out.println(ex.toString());
       }
     }
-    // </editor-fold>
-    // </editor-fold>
-    // <editor-fold desc="PRODUCT LINE TAB">
+
     // set up item type choice box
-    for (ItemType type : ItemType.values()) {
-      itemTypeChoiceBox.getItems().add(type.toString());
-    }
+    for (ItemType type : ItemType.values()) itemTypeChoiceBox.getItems().add(type);
     itemTypeChoiceBox.getSelectionModel().selectFirst();
 
-    // set up existing products
-    existingProdId.setCellValueFactory(new PropertyValueFactory("id"));
-    existingProdName.setCellValueFactory(new PropertyValueFactory("name"));
-    existingProdManu.setCellValueFactory(new PropertyValueFactory("manufacturer"));
-    existingProdType.setCellValueFactory(new PropertyValueFactory("type"));
-    // </editor-fold>
-    // <editor-fold desc="PRODUCE TAB">
     // set up combo box items
-    chooseQuantityComboBox.setItems(
-        FXCollections.observableArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"));
-    chooseQuantityComboBox.setEditable(true);
+    chooseQuantityComboBox.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
     chooseQuantityComboBox.getSelectionModel().selectFirst();
-    // </editor-fold>
+
     // set up alert box
     toolTipBox = new Alert(Alert.AlertType.WARNING);
   }
 
+  /**
+   * Method that takes a product, stores it, and adds it to the existing products TableView, and the
+   * products ListView
+   *
+   * @param product Product to store and add.
+   */
   public void addToExistingProducts(Product product) {
+    productionArrayList.add(product);
+    productionHashMap.put(product.getId(), product);
     existingProductsTableView.getItems().add(product);
     chooseProductListView.getItems().add(product.getManufacturer() + " " + product.getName());
   }
