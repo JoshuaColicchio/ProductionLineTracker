@@ -82,7 +82,8 @@ public class DatabaseManager {
    * General method to insert data into the database. For internal use only.
    *
    * @param query Query String to execute.
-   * @param returnGeneratedKeys If true, the method catches any generated keys produced by the insert.
+   * @param returnGeneratedKeys If true, the method catches any generated keys produced by the
+   *     insert.
    * @param params Any values that should be inserted into the PreparedStatement upon creation.
    * @return ResultSet containing the generated keys.
    */

@@ -15,14 +15,14 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-
 <?import javafx.scene.control.cell.PropertyValueFactory?>
+
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.201"
+         prefHeight="400.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.201"
          xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
     <Tab text="Product Line">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-            <GridPane layoutX="14.0" layoutY="14.0" prefHeight="106.0" prefWidth="568.0">
+            <GridPane layoutX="14.0" layoutY="14.0" prefHeight="106.0" prefWidth="800.0">
                 <columnConstraints>
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="278.0" minWidth="10.0" prefWidth="99.0"/>
                     <ColumnConstraints hgrow="SOMETIMES" maxWidth="469.0" minWidth="10.0" prefWidth="469.0"/>
@@ -42,29 +42,29 @@
                 <ChoiceBox fx:id="itemTypeChoiceBox" prefHeight="25.0" prefWidth="468.0" GridPane.columnIndex="1"
                            GridPane.rowIndex="2"/>
             </GridPane>
-            <Button layoutX="487.0" layoutY="132.0" mnemonicParsing="false"
+            <Button layoutX="665.0" layoutY="132.0" mnemonicParsing="false"
                     onAction="#addProductBtnPushed" text="Add Product"/>
-            <Label alignment="CENTER" layoutX="16.0" layoutY="177.0" prefHeight="17.0" prefWidth="566.0"
+            <Label alignment="CENTER" layoutX="16.0" layoutY="177.0" prefHeight="17.0" prefWidth="800.0"
                    text="Existing Products"/>
             <TableView fx:id="existingProductsTableView" layoutX="16.0" layoutY="198.0" prefHeight="158.0"
-                       prefWidth="570.0">
+                       prefWidth="767.0">
                 <columns>
-                    <TableColumn prefWidth="142.5" text="Product ID">
+                    <TableColumn prefWidth="193.75" text="Product ID">
                         <cellValueFactory>
                             <PropertyValueFactory property="id"/>
                         </cellValueFactory>
                     </TableColumn>
-                    <TableColumn prefWidth="142.5" text="Product Name">
+                    <TableColumn prefWidth="193.75" text="Product Name">
                         <cellValueFactory>
                             <PropertyValueFactory property="name"/>
                         </cellValueFactory>
                     </TableColumn>
-                    <TableColumn prefWidth="142.5" text="Manufacturer">
+                    <TableColumn prefWidth="193.75" text="Manufacturer">
                         <cellValueFactory>
                             <PropertyValueFactory property="manufacturer"/>
                         </cellValueFactory>
                     </TableColumn>
-                    <TableColumn prefWidth="142.5" text="Type">
+                    <TableColumn prefWidth="193.75" text="Type">
                         <cellValueFactory>
                             <PropertyValueFactory property="type"/>
                         </cellValueFactory>
@@ -77,18 +77,18 @@
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" text="Choose Product:"/>
             <ListView fx:id="chooseProductListView" layoutX="116.0" layoutY="14.0" prefHeight="66.0"
-                      prefWidth="465.0"/>
+                      prefWidth="666.0"/>
             <Label alignment="CENTER" layoutY="98.0" prefHeight="17.0" prefWidth="115.0" text="Choose Quantity:"/>
             <ComboBox fx:id="chooseQuantityComboBox" layoutX="117.0" layoutY="94.0" prefHeight="25.0"
-                      prefWidth="464.0" editable="true"/>
-            <Button layoutX="450.0" layoutY="132.0" mnemonicParsing="false"
+                      prefWidth="666.0" editable="true"/>
+            <Button layoutX="655.0" layoutY="132.0" mnemonicParsing="false"
                     onAction="#recordProductBtnPushed" text="Record Production"/>
         </AnchorPane>
     </Tab>
     <Tab text="Production Log">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <TextArea fx:id="productionLogTextArea" layoutX="14.0" layoutY="14.0" prefHeight="344.0"
-                      prefWidth="574.0"/>
+                      prefWidth="770.0"/>
         </AnchorPane>
     </Tab>
 </TabPane>
