@@ -82,6 +82,11 @@ public class Controller {
       toolTipBox.setContentText("Invalid Quantity!");
       toolTipBox.show();
     }
+
+    // Clear selection & reset quantity to 1
+    chooseProductListView.getSelectionModel().selectFirst();
+    chooseQuantityComboBox.setValue("1");
+
   }
 
   /** Method that is called when the program launches which initializes all default values. */

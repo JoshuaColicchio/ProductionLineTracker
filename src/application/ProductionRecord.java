@@ -26,6 +26,20 @@ public class ProductionRecord {
     this.serialNumber = generateSerialNumber(product);
     this.dateProduced = new java.util.Date().getTime();
     this.productRef = product;
+    switch (product.getType()) {
+      case AU:
+        auCount++;
+        break;
+      case VI:
+        viCount++;
+        break;
+      case AM:
+        amCount++;
+        break;
+      case VM:
+        vmCount++;
+        break;
+    }
   }
 
   public ProductionRecord(int quantity, String serialNum, long dateProduced, Product prodRef) {
@@ -34,6 +48,20 @@ public class ProductionRecord {
     this.serialNumber = serialNum;
     this.dateProduced = dateProduced;
     this.productRef = prodRef;
+    switch (prodRef.getType()) {
+      case AU:
+        auCount++;
+        break;
+      case VI:
+        viCount++;
+        break;
+      case AM:
+        amCount++;
+        break;
+      case VM:
+        vmCount++;
+        break;
+    }
   }
 
   /**
