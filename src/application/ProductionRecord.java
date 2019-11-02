@@ -68,18 +68,9 @@ public class ProductionRecord {
   }
 
   /**
-   * Method to retrieve this Production Record's production number.
-   *
-   * @return The production number.
-   */
-  public int getProductionNumber() {
-    return productionNumber;
-  }
-
-  /**
    * Method to set the production number of this Production Record.
    *
-   * @param productionNumber
+   * @param productionNumber The ID of this Production Record.
    */
   public void setProductionNumber(int productionNumber) {
     this.productionNumber = productionNumber;
@@ -95,30 +86,12 @@ public class ProductionRecord {
   }
 
   /**
-   * Method to set this Production Record's product ID.
-   *
-   * @param productID
-   */
-  public void setProductID(int productID) {
-    this.productID = productID;
-  }
-
-  /**
    * Method to retrieve this Production Record's serial number.
    *
-   * @return
+   * @return The serial number associated with this Production Record.
    */
   public String getSerialNumber() {
     return serialNumber;
-  }
-
-  /**
-   * Method to set the serial number of this Production Record.
-   *
-   * @param serialNumber The new serial number.
-   */
-  public void setSerialNumber(String serialNumber) {
-    this.serialNumber = serialNumber;
   }
 
   /**
@@ -128,15 +101,6 @@ public class ProductionRecord {
    */
   public java.util.Date getDateProduced() {
     return new java.util.Date(dateProduced);
-  }
-
-  /**
-   * Method to set the production date of this Production Record.
-   *
-   * @param dateProduced Date to change the production date to.
-   */
-  public void setDateProduced(java.util.Date dateProduced) {
-    this.dateProduced = dateProduced.getTime();
   }
 
   /**
@@ -157,39 +121,15 @@ public class ProductionRecord {
     return QuantityProduced;
   }
 
-  /**
-   * Method to change the quantity of products produced in this Production Record.
-   *
-   * @param quantityProduced Integer value of the number of products produced.
-   */
-  public void setQuantityProduced(int quantityProduced) {
-    QuantityProduced = quantityProduced;
-  }
-
-  // Went overboard with this javadoc because I wanted to try formatting the text a bit, and have it
-  // for future reference.
-  /**
-   * Returns a string representation of the Production Record object. In general, this will return a
-   * string with the following form:
-   *
-   * <blockquote>
-   *
-   * Product Name: productName | Product ID: productID | Serial Num: serialNumber | Date:
-   * dateProduced
-   *
-   * </blockquote>
-   *
-   * @return String
-   */
   public String toString() {
     return "Product Name: "
-        + productRef.getName()
-        + " | Product ID: "
-        + productID
-        + " | Serial Num: "
-        + serialNumber
-        + " | Date: "
-        + new java.util.Date(dateProduced);
+            + productRef.getName()
+            + " | Product ID: "
+            + productID
+            + " | Serial Num: "
+            + serialNumber
+            + " | Date: "
+            + new java.util.Date(dateProduced);
   }
 
   /**
@@ -204,30 +144,30 @@ public class ProductionRecord {
       case AU:
         auCount++;
         serial =
-            product.getManufacturer().substring(0, 3)
-                + product.getType().name()
-                + String.format("%05d", auCount);
+                product.getManufacturer().substring(0, 3)
+                        + product.getType().name()
+                        + String.format("%05d", auCount);
         break;
       case VI:
         viCount++;
         serial =
-            product.getManufacturer().substring(0, 3)
-                + product.getType().name()
-                + String.format("%05d", viCount);
+                product.getManufacturer().substring(0, 3)
+                        + product.getType().name()
+                        + String.format("%05d", viCount);
         break;
       case AM:
         amCount++;
         serial =
-            product.getManufacturer().substring(0, 3)
-                + product.getType().name()
-                + String.format("%05d", amCount);
+                product.getManufacturer().substring(0, 3)
+                        + product.getType().name()
+                        + String.format("%05d", amCount);
         break;
       case VM:
         vmCount++;
         serial =
-            product.getManufacturer().substring(0, 3)
-                + product.getType().name()
-                + String.format("%05d", vmCount);
+                product.getManufacturer().substring(0, 3)
+                        + product.getType().name()
+                        + String.format("%05d", vmCount);
         break;
     }
     return serial;
