@@ -52,7 +52,7 @@ public class DatabaseManager {
   public static int saveProductionRecord(ProductionRecord prodRec) {
     ResultSet rs =
         insert(
-            "INSERT INTO PRODUCTIONRECORD (PRODUCT_ID, QUANTITY_PRODUCED, SERIAL_NUM, DATE_PRODUCED) "
+            "INSERT INTO PRODUCTION_RECORD (PRODUCT_ID, QUANTITY_PRODUCED, SERIAL_NUM, DATE_PRODUCED) "
                 + "VALUES (?,?,?,?)",
             true,
             prodRec.getProductID(),
@@ -75,7 +75,7 @@ public class DatabaseManager {
    * @return ResultSet containing all production records in the database.
    */
   public static ResultSet loadProductionRecord() {
-    return select("SELECT * FROM PRODUCTIONRECORD");
+    return select("SELECT * FROM PRODUCTION_RECORD");
   }
 
   /**

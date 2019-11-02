@@ -115,10 +115,10 @@ public class Controller {
                       null);
               break;
             case "AudioMobile":
-              System.out.println("audiomobile has not been implemented yet");
+              System.out.println("audio mobile has not been implemented yet");
               return;
             case "VisualMobile":
-              System.out.println("visualmobile has not been implemented yet");
+              System.out.println("visual mobile has not been implemented yet");
               return;
             default: // Should never reach this, but doesn't hurt to check.
               System.out.println("ERROR: Unknown product type: " + products.getString("TYPE"));
@@ -162,7 +162,7 @@ public class Controller {
     chooseQuantityComboBox.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
     chooseQuantityComboBox.getSelectionModel().selectFirst();
 
-    // set up listview cell factory
+    // set up list view cell factory
     chooseProductListView.setCellFactory(
         new Callback<ListView<Product>, ListCell<Product>>() {
           @Override
