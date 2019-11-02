@@ -20,7 +20,6 @@ public class DatabaseManager {
     ResultSet rs =
         insert(
             "INSERT INTO PRODUCT (NAME, TYPE, MANUFACTURER) VALUES (?,?,?)",
-            true,
             prodName,
             itemType.toString(),
             manuName);
@@ -53,7 +52,6 @@ public class DatabaseManager {
         insert(
             "INSERT INTO PRODUCTION_RECORD (PRODUCT_ID, QUANTITY_PRODUCED, SERIAL_NUM, DATE_PRODUCED) "
                 + "VALUES (?,?,?,?)",
-            true,
             prodRec.getProductID(),
             prodRec.getQuantityProduced(),
             prodRec.getSerialNumber(),
@@ -98,7 +96,8 @@ public class DatabaseManager {
       } else throw new Exception("Could not establish connection.");
     } catch (Exception ex) {
       System.out.println(
-          "Exception in DatabaseManager.insert\nReason: " + ex.getLocalizedMessage());
+          "Exception in DatabaseManager.insert\nReason: " + ex.getLocalizedMessage() + "\n");
+      ex.printStackTrace();
     }
     return null;
   }
