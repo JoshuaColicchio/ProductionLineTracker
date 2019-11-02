@@ -11,10 +11,10 @@ public class Screen implements ScreenSpec {
   private int refreshRate;
   private int responseTime;
 
-  public Screen(String reso, int refresh, int response) {
-    resolution = reso;
-    refreshRate = refresh;
-    responseTime = response;
+  public Screen(String resolution, int refreshRate, int responseTime) {
+    this.resolution = resolution;
+    this.refreshRate = refreshRate;
+    this.responseTime = responseTime;
   }
 
   @Override

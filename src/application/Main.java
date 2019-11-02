@@ -34,7 +34,7 @@ public class Main extends Application {
   }
 }
 
-/*  Potential solution to issue 12 - reverse deptid
+/*  Potential solution to issue 12 - reverse dept id
  public void reverseString(String string) {
    String temp = "";
    for (int i = 1; i <= string.length(); i++) {
