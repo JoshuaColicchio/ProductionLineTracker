@@ -1,6 +1,9 @@
 package application;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * This is the database driver class. It handles all database interactions.
@@ -8,6 +11,8 @@ import java.sql.*;
  * @author Joshua Colicchio
  */
 class DatabaseManager {
+
+  private static final HashMap<Integer, Product> allProducts = new HashMap<>();
 
   /**
    * Method to add a new product to the database.
@@ -38,8 +43,57 @@ class DatabaseManager {
    *
    * @return ResultSet containing all products in the database.
    */
-  public static ResultSet loadProducts() {
-    return select("SELECT * FROM PRODUCT");
+  public static List<Product> loadProducts() {
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet resultSet = null;
+    List<Product> products = new ArrayList<>();
+
+    try {
+      // establish connection
+      Class.forName("org.h2.Driver");
+      connection = DriverManager.getConnection("jdbc:h2:./res/productiontracker");
+      statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
+      while (resultSet.next()) {
+        Product temp = null;
+        if (resultSet.getString("TYPE").compareTo("Audio") == 0) {
+          temp =
+              new AudioPlayer(
+                  resultSet.getInt("ID"),
+                  resultSet.getString("NAME"),
+                  resultSet.getString("MANUFACTURER"),
+                  resultSet.getString("TYPE"),
+                  "MP3");
+        } else if (resultSet.getString("TYPE").compareTo("Visual") == 0) {
+          temp =
+              new MoviePlayer(
+                  resultSet.getInt("ID"),
+                  resultSet.getString("NAME"),
+                  resultSet.getString("MANUFACTURER"),
+                  new Screen("1920x1080", 144, 22),
+                  MonitorType.LED);
+        } else if (resultSet.getString("TYPE").compareTo("AudioMobile") == 0) {
+          System.out.println("audio mobile has not been implemented yet");
+        } else if (resultSet.getString("TYPE").compareTo("VisualMobile") == 0) {
+          System.out.println("visual mobile has not been implemented yet");
+        }
+
+        if (temp != null) {
+          products.add(temp);
+          // I'd like to eliminate the need for this, but I haven't taken the time to think of
+          // another way to do this yet.
+          allProducts.put(temp.getId(), temp);
+        }
+      }
+    } catch (Exception ex) {
+      System.out.println(
+          "Exception in DatabaseManager.loadProducts.\nReason: " + ex.getLocalizedMessage());
+      ex.printStackTrace();
+    } finally {
+      closeConnection(connection, statement, resultSet);
+    }
+    return products;
   }
 
   /**
@@ -62,8 +116,37 @@ class DatabaseManager {
    *
    * @return ResultSet containing all production records in the database.
    */
-  public static ResultSet loadProductionRecord() {
-    return select("SELECT * FROM PRODUCTION_RECORD");
+  public static List<ProductionRecord> loadProductionRecords() {
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet resultSet = null;
+    List<ProductionRecord> productionRecords = new ArrayList<>();
+
+    try {
+      // establish connection
+      Class.forName("org.h2.Driver");
+      connection = DriverManager.getConnection("jdbc:h2:./res/productiontracker");
+      statement = connection.createStatement();
+      resultSet = statement.executeQuery("SELECT * FROM PRODUCTION_RECORD");
+      while (resultSet.next()) {
+        ProductionRecord record =
+            new ProductionRecord(
+                resultSet.getInt("QUANTITY_PRODUCED"),
+                resultSet.getString("SERIAL_NUM"),
+                resultSet.getLong("DATE_PRODUCED"),
+                allProducts.get(resultSet.getInt("PRODUCT_ID")));
+
+        productionRecords.add(record);
+      }
+    } catch (Exception ex) {
+      System.out.println(
+          "Exception in DatabaseManager.loadProductionRecords.\nReason: "
+              + ex.getLocalizedMessage());
+      ex.printStackTrace();
+    } finally {
+      closeConnection(connection, statement, resultSet);
+    }
+    return productionRecords;
   }
 
   /**
@@ -74,15 +157,17 @@ class DatabaseManager {
    * @return ResultSet containing the generated keys.
    */
   private static ResultSet insert(String query, Object... params) {
+    Connection connection = null;
+    PreparedStatement pstmt = null;
+
     try {
       // establish connection
       Class.forName("org.h2.Driver");
-      Connection connection = DriverManager.getConnection("jdbc:h2:./res/productiontracker");
+      connection = DriverManager.getConnection("jdbc:h2:./res/productiontracker");
 
       // ensure valid connection
       if (connection != null) {
-        PreparedStatement pstmt =
-            connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
+        pstmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
 
         for (int i = 0; i < params.length; i++) {
           if (params[i] instanceof String) pstmt.setString(i + 1, (String) params[i]);
@@ -97,31 +182,54 @@ class DatabaseManager {
       System.out.println(
           "Exception in DatabaseManager.insert\nReason: " + ex.getLocalizedMessage() + "\n");
       ex.printStackTrace();
+    } finally {
+      if (pstmt != null)
+        try {
+          pstmt.close();
+        } catch (Exception ex) {
+          System.out.println(
+              "Error in DatabaseManager.insert. Could not close PreparedStatement.\nReason: "
+                  + ex.getLocalizedMessage());
+          ex.printStackTrace();
+        }
+      if (connection != null)
+        try {
+          connection.close();
+        } catch (Exception ex) {
+          System.out.println(
+              "Error in DatabaseManager.insert. Could not close Connection.\nReason: "
+                  + ex.getLocalizedMessage());
+          ex.printStackTrace();
+        }
     }
     return null;
   }
 
-  /**
-   * Method to select data from the database.
-   *
-   * @param query Query string to execute.
-   * @return ResultSet containing the result of the query.
-   */
-  private static ResultSet select(String query) {
-    try {
-      // establish connection
-      Class.forName("org.h2.Driver");
-      Connection connection = DriverManager.getConnection("jdbc:h2:./res/productiontracker");
-
-      // ensure valid connection
-      if (connection != null) {
-        return connection.createStatement().executeQuery(query);
-      } else throw new Exception("Could not establish connection.");
-
-    } catch (Exception ex) {
-      System.out.println(
-          "Exception in DatabaseManager.select\nReason: " + ex.getLocalizedMessage());
-    }
-    return null;
+  private static void closeConnection(
+      Connection connection, Statement statement, ResultSet resultSet) {
+    if (resultSet != null)
+      try {
+        resultSet.close();
+      } catch (SQLException ex) {
+        System.out.println(
+            "Error closing ResultSet in DatabaseManager.select.\nReason: "
+                + ex.getLocalizedMessage());
+      }
+    if (statement != null)
+      try {
+        statement.close();
+      } catch (SQLException ex) {
+        System.out.println(
+            "Error closing Statement in DatabaseManager.select.\nReason: "
+                + ex.getLocalizedMessage());
+      }
+    if (connection != null)
+      try {
+        connection.close();
+      } catch (SQLException ex) {
+        System.out.println(
+            "Error closing Connection in DatabaseManager.select.\nReason: "
+                + ex.getLocalizedMessage());
+      }
   }
 }

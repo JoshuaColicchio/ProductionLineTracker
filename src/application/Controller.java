@@ -3,8 +3,7 @@ package application;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.Callback;
-import java.sql.ResultSet;
-import java.util.HashMap;
+import java.util.List;
 
 /**
  * Controller class used to manage GUI object interactions.
@@ -22,7 +21,6 @@ public class Controller {
   @FXML private ListView<Product> chooseProductListView;
   @FXML private ComboBox<String> chooseQuantityComboBox;
   @FXML private TextArea productionLogTextArea;
-  private final HashMap<Integer, Product> productionHashMap = new HashMap<>();
   private Alert toolTipBox;
 
   /** Method that is called when the "Add Product" button is pressed. */
@@ -92,68 +90,15 @@ public class Controller {
   /** Method that is called when the program launches which initializes all default values. */
   public void initialize() {
     // Load all existing products from the database.
-    ResultSet products = DatabaseManager.loadProducts();
-    if (products != null) {
-      try {
-        while (products.next()) {
-          Product temp;
-          switch (products.getString("TYPE")) {
-            case "Audio":
-              temp =
-                  new AudioPlayer(
-                      products.getInt("ID"),
-                      products.getString("NAME"),
-                      products.getString("MANUFACTURER"),
-                      products.getString("TYPE"),
-                      "unknown atm");
-              break;
-            case "Visual":
-              temp =
-                  new MoviePlayer(
-                      products.getInt("ID"),
-                      products.getString("NAME"),
-                      products.getString("MANUFACTURER"),
-                      new Screen("1920x1080", 144, 22),
-                          new java.util.Random().nextBoolean() ? MonitorType.LED : MonitorType.LCD);
-              break;
-            case "AudioMobile":
-              System.out.println("audio mobile has not been implemented yet");
-              return;
-            case "VisualMobile":
-              System.out.println("visual mobile has not been implemented yet");
-              return;
-            default: // Should never reach this, but doesn't hurt to check.
-              System.out.println("ERROR: Unknown product type: " + products.getString("TYPE"));
-              return;
-          }
-          addToExistingProducts(temp);
-        }
-      } catch (Exception ex) {
-        System.out.println(ex.toString());
-      }
-    }
+    List<Product> products = DatabaseManager.loadProducts();
+    for (Product prod : products) addToExistingProducts(prod);
 
     // Load all existing product records from the database.
-    ResultSet records = DatabaseManager.loadProductionRecord();
-    if (records != null) {
-      try {
-        while (records.next()) {
-          // Get the corresponding product & create a ProductionRecord instance.
-          Product prod = productionHashMap.get(records.getInt("PRODUCT_ID"));
-          ProductionRecord pr =
-              new ProductionRecord(
-                  records.getInt("QUANTITY_PRODUCED"),
-                  records.getString("SERIAL_NUM"),
-                  records.getLong("DATE_PRODUCED"),
-                  prod);
-          pr.setProductRef(productionHashMap.get(pr.getProductID()));
-          if (productionLogTextArea.getText().isEmpty())
-            productionLogTextArea.setText(pr.toString());
-          else productionLogTextArea.appendText("\n" + pr.toString());
-        }
-      } catch (Exception ex) {
-        System.out.println(ex.toString());
-      }
+    List<ProductionRecord> records = DatabaseManager.loadProductionRecords();
+    for (ProductionRecord record : records) {
+      if (productionLogTextArea.getText().isEmpty())
+        productionLogTextArea.setText(record.toString());
+      else productionLogTextArea.appendText("\n" + record.toString());
     }
 
     // set up item type choice box
@@ -191,7 +136,6 @@ public class Controller {
    * @param product Product to store and add.
    */
   private void addToExistingProducts(Product product) {
-    productionHashMap.put(product.getId(), product);
     existingProductsTableView.getItems().add(product);
     chooseProductListView.getItems().add(product);
   }
