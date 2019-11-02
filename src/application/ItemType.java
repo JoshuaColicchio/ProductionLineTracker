@@ -6,6 +6,11 @@ public enum ItemType {
   AM,
   VM;
 
+  /**
+   * Method that converts the provided enum into its' String form.
+   *
+   * @return The String version of the enum value.
+   */
   public String toString() {
     switch (this) {
       case AU:

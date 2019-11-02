@@ -1,6 +1,11 @@
 package application;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +35,9 @@ class DatabaseManager {
             manuName);
 
     try {
-      if (rs != null && rs.next()) return rs.getInt(1);
+      if (rs != null && rs.next()) {
+        return rs.getInt(1);
+      }
     } catch (Exception ex) {
       System.out.println(
           "Exception in DatabaseManager.addProduct\nReason: " + ex.getLocalizedMessage());
@@ -170,20 +177,26 @@ class DatabaseManager {
         pstmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
 
         for (int i = 0; i < params.length; i++) {
-          if (params[i] instanceof String) pstmt.setString(i + 1, (String) params[i]);
-          else if (params[i] instanceof Integer) pstmt.setInt(i + 1, (int) params[i]);
-          else if (params[i] instanceof Long) pstmt.setLong(i + 1, (long) params[i]);
+          if (params[i] instanceof String) {
+            pstmt.setString(i + 1, (String) params[i]);
+          } else if (params[i] instanceof Integer) {
+            pstmt.setInt(i + 1, (int) params[i]);
+          } else if (params[i] instanceof Long) {
+            pstmt.setLong(i + 1, (long) params[i]);
+          }
         }
 
         pstmt.executeUpdate();
         return pstmt.getGeneratedKeys();
-      } else throw new Exception("Could not establish connection.");
+      } else {
+        throw new Exception("Could not establish connection.");
+      }
     } catch (Exception ex) {
       System.out.println(
           "Exception in DatabaseManager.insert\nReason: " + ex.getLocalizedMessage() + "\n");
       ex.printStackTrace();
     } finally {
-      if (pstmt != null)
+      if (pstmt != null) {
         try {
           pstmt.close();
         } catch (Exception ex) {
@@ -192,7 +205,8 @@ class DatabaseManager {
                   + ex.getLocalizedMessage());
           ex.printStackTrace();
         }
-      if (connection != null)
+      }
+      if (connection != null) {
         try {
           connection.close();
         } catch (Exception ex) {
@@ -201,13 +215,14 @@ class DatabaseManager {
                   + ex.getLocalizedMessage());
           ex.printStackTrace();
         }
+      }
     }
     return null;
   }
 
   private static void closeConnection(
       Connection connection, Statement statement, ResultSet resultSet) {
-    if (resultSet != null)
+    if (resultSet != null) {
       try {
         resultSet.close();
       } catch (SQLException ex) {
@@ -215,7 +230,8 @@ class DatabaseManager {
             "Error closing ResultSet in DatabaseManager.select.\nReason: "
                 + ex.getLocalizedMessage());
       }
-    if (statement != null)
+    }
+    if (statement != null) {
       try {
         statement.close();
       } catch (SQLException ex) {
@@ -223,7 +239,8 @@ class DatabaseManager {
             "Error closing Statement in DatabaseManager.select.\nReason: "
                 + ex.getLocalizedMessage());
       }
-    if (connection != null)
+    }
+    if (connection != null) {
       try {
         connection.close();
       } catch (SQLException ex) {
@@ -231,5 +248,6 @@ class DatabaseManager {
             "Error closing Connection in DatabaseManager.select.\nReason: "
                 + ex.getLocalizedMessage());
       }
+    }
   }
 }

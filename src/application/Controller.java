@@ -1,9 +1,16 @@
 package application;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.util.Callback;
 import java.util.List;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.util.Callback;
 
 /**
  * Controller class used to manage GUI object interactions.
@@ -76,7 +83,9 @@ public class Controller {
 
       if (productionLogTextArea.getText().trim().isEmpty()) {
         productionLogTextArea.setText(productionRecord.toString());
-      } else productionLogTextArea.appendText("\n" + productionRecord.toString());
+      } else {
+        productionLogTextArea.appendText("\n" + productionRecord.toString());
+      }
     } catch (NumberFormatException nfe) {
       toolTipBox.setContentText("Invalid Quantity!");
       toolTipBox.show();
@@ -91,18 +100,24 @@ public class Controller {
   public void initialize() {
     // Load all existing products from the database.
     List<Product> products = DatabaseManager.loadProducts();
-    for (Product prod : products) addToExistingProducts(prod);
+    for (Product prod : products) {
+      addToExistingProducts(prod);
+    }
 
     // Load all existing product records from the database.
     List<ProductionRecord> records = DatabaseManager.loadProductionRecords();
     for (ProductionRecord record : records) {
-      if (productionLogTextArea.getText().isEmpty())
+      if (productionLogTextArea.getText().isEmpty()) {
         productionLogTextArea.setText(record.toString());
-      else productionLogTextArea.appendText("\n" + record.toString());
+      } else {
+        productionLogTextArea.appendText("\n" + record.toString());
+      }
     }
 
     // set up item type choice box
-    for (ItemType type : ItemType.values()) itemTypeChoiceBox.getItems().add(type);
+    for (ItemType type : ItemType.values()) {
+      itemTypeChoiceBox.getItems().add(type);
+    }
     itemTypeChoiceBox.getSelectionModel().selectFirst();
 
     // set up combo box items
@@ -118,8 +133,11 @@ public class Controller {
               @Override
               protected void updateItem(Product item, boolean empty) {
                 super.updateItem(item, empty);
-                if (item != null) setText(item.getManufacturer() + " " + item.getName());
-                else setText("");
+                if (item != null) {
+                  setText(item.getManufacturer() + " " + item.getName());
+                } else {
+                  setText("");
+                }
               }
             };
           }
@@ -131,7 +149,7 @@ public class Controller {
 
   /**
    * Method that takes a product, stores it, and adds it to the existing products TableView, and the
-   * products ListView
+   * products ListView.
    *
    * @param product Product to store and add.
    */
