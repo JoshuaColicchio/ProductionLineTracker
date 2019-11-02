@@ -7,8 +7,8 @@ package application;
  */
 public class AudioPlayer extends Product implements MultimediaControl {
 
-  private String supportedAudioFormats;
-  private String supportedPlaylistFormats;
+  private final String supportedAudioFormats;
+  private final String supportedPlaylistFormats;
 
   public AudioPlayer(
       int id,

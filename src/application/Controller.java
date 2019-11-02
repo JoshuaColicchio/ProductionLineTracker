@@ -20,8 +20,8 @@ public class Controller {
   @FXML private ListView<Product> chooseProductListView;
   @FXML private ComboBox<String> chooseQuantityComboBox;
   @FXML private TextArea productionLogTextArea;
+  private final HashMap<Integer, Product> productionHashMap = new HashMap<>();
   private Alert toolTipBox;
-  private HashMap<Integer, Product> productionHashMap = new HashMap<>();
 
   /** Method that is called when the "Add Product" button is pressed. */
   @FXML
@@ -72,7 +72,7 @@ public class Controller {
               Integer.parseInt(chooseQuantityComboBox.getValue()),
               chooseProductListView.getSelectionModel().getSelectedItem());
 
-      productionRecord.setProductionNumber(DatabaseManager.saveProductionRecord(productionRecord));
+      DatabaseManager.saveProductionRecord(productionRecord);
 
       if (productionLogTextArea.getText().trim().isEmpty()) {
         productionLogTextArea.setText(productionRecord.toString());
@@ -94,7 +94,7 @@ public class Controller {
     if (products != null) {
       try {
         while (products.next()) {
-          Product temp = null;
+          Product temp;
           switch (products.getString("TYPE")) {
             case "Audio":
               temp =
@@ -111,8 +111,8 @@ public class Controller {
                       products.getInt("ID"),
                       products.getString("NAME"),
                       products.getString("MANUFACTURER"),
-                      null,
-                      null);
+                      new Screen("1920x1080", 144, 22),
+                      MonitorType.LED);
               break;
             case "AudioMobile":
               System.out.println("audio mobile has not been implemented yet");
@@ -167,16 +167,14 @@ public class Controller {
         new Callback<ListView<Product>, ListCell<Product>>() {
           @Override
           public ListCell<Product> call(ListView<Product> param) {
-            ListCell<Product> cell =
-                new ListCell<Product>() {
-                  @Override
-                  protected void updateItem(Product item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (item != null) setText(item.getManufacturer() + " " + item.getName());
-                    else setText("");
-                  }
-                };
-            return cell;
+            return new ListCell<Product>() {
+              @Override
+              protected void updateItem(Product item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item != null) setText(item.getManufacturer() + " " + item.getName());
+                else setText("");
+              }
+            };
           }
         });
 

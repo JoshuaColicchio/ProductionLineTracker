@@ -7,8 +7,8 @@ package application;
  */
 public class MoviePlayer extends Product implements MultimediaControl {
 
-  private Screen screen;
-  private MonitorType monitorType;
+  private final Screen screen;
+  private final MonitorType monitorType;
 
   public MoviePlayer(int id, String name, String manu, Screen screen, MonitorType monitorType) {
     super(id, name, manu, ItemType.VI);
