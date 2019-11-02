@@ -15,8 +15,6 @@ public class ProductionRecord {
   private static int amCount = 0;
   private static int vmCount = 0;
 
-  // Instance variables
-  private int productionNumber = -1;
   private int QuantityProduced;
   private int productID;
   private Product productRef;
@@ -65,15 +63,6 @@ public class ProductionRecord {
     if (prodRef.getType() == ItemType.VI) viCount++;
     if (prodRef.getType() == ItemType.AM) amCount++;
     if (prodRef.getType() == ItemType.VM) vmCount++;
-  }
-
-  /**
-   * Method to set the production number of this Production Record.
-   *
-   * @param productionNumber The ID of this Production Record.
-   */
-  public void setProductionNumber(int productionNumber) {
-    this.productionNumber = productionNumber;
   }
 
   /**
