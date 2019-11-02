@@ -15,11 +15,11 @@ public class ProductionRecord {
   private static int amCount = 0;
   private static int vmCount = 0;
 
-  private int QuantityProduced;
-  private int productID;
+  private final int QuantityProduced;
+  private final int productID;
+  private final String serialNumber;
+  private final long dateProduced;
   private Product productRef;
-  private String serialNumber;
-  private long dateProduced;
 
   /**
    * Constructor used when creating a new ProductionRecord.
