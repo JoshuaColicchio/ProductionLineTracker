@@ -6,7 +6,7 @@ package application;
  *
  * @author Joshua Colicchio
  */
-public class ProductionRecord {
+class ProductionRecord {
 
   // Store the number of existing products of a certain ItemType.
   // These get used when creating a new serial number.

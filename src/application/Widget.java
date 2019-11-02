@@ -5,9 +5,9 @@ package application;
  *
  * @author Joshua Colicchio
  */
-public class Widget extends Product {
+class Widget extends Product {
 
-  public Widget(int id, String name, String manu, ItemType type) {
+  Widget(int id, String name, String manu, ItemType type) {
     super(id, name, manu, type);
   }
 }

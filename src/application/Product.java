@@ -5,14 +5,14 @@ package application;
  *
  * @author Joshua Colicchio
  */
-public abstract class Product implements Item {
+abstract class Product implements Item {
 
   private int id;
   private String name;
   private String manufacturer;
   private ItemType type;
 
-  public Product(int id, String name, String manu, ItemType type) {
+  Product(int id, String name, String manu, ItemType type) {
     this.id = id;
     this.name = name;
     this.manufacturer = manu;

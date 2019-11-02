@@ -11,6 +11,8 @@ import java.util.HashMap;
  *
  * @author Joshua Colicchio
  */
+// Despite what IntelliJ says, this CANNOT be package private. The FXML page will be unable to load.
+@SuppressWarnings("WeakerAccess") // So I suppress this warning.
 public class Controller {
 
   @FXML private TextField productNameTextField;
@@ -112,7 +114,7 @@ public class Controller {
                       products.getString("NAME"),
                       products.getString("MANUFACTURER"),
                       new Screen("1920x1080", 144, 22),
-                      MonitorType.LED);
+                          new java.util.Random().nextBoolean() ? MonitorType.LED : MonitorType.LCD);
               break;
             case "AudioMobile":
               System.out.println("audio mobile has not been implemented yet");
@@ -188,7 +190,7 @@ public class Controller {
    *
    * @param product Product to store and add.
    */
-  public void addToExistingProducts(Product product) {
+  private void addToExistingProducts(Product product) {
     productionHashMap.put(product.getId(), product);
     existingProductsTableView.getItems().add(product);
     chooseProductListView.getItems().add(product);

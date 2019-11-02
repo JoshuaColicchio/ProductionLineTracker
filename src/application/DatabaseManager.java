@@ -7,7 +7,7 @@ import java.sql.*;
  *
  * @author Joshua Colicchio
  */
-public class DatabaseManager {
+class DatabaseManager {
 
   /**
    * Method to add a new product to the database.
@@ -48,14 +48,13 @@ public class DatabaseManager {
    * @param prodRec ProductionRecord object that you want to be saved to the database.
    */
   public static void saveProductionRecord(ProductionRecord prodRec) {
-    ResultSet rs =
-        insert(
-            "INSERT INTO PRODUCTION_RECORD (PRODUCT_ID, QUANTITY_PRODUCED, SERIAL_NUM, DATE_PRODUCED) "
-                + "VALUES (?,?,?,?)",
-            prodRec.getProductID(),
-            prodRec.getQuantityProduced(),
-            prodRec.getSerialNumber(),
-            prodRec.getDateProduced().getTime());
+    insert(
+        "INSERT INTO PRODUCTION_RECORD (PRODUCT_ID, QUANTITY_PRODUCED, SERIAL_NUM, DATE_PRODUCED) "
+            + "VALUES (?,?,?,?)",
+        prodRec.getProductID(),
+        prodRec.getQuantityProduced(),
+        prodRec.getSerialNumber(),
+        prodRec.getDateProduced().getTime());
   }
 
   /**
