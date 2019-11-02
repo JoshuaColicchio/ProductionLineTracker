@@ -33,3 +33,13 @@ public class Main extends Application {
     launch(args);
   }
 }
+
+/*  Potential solution to issue 12 - reverse deptid
+ public void reverseString(String string) {
+   String temp = "";
+   for (int i = 1; i <= string.length(); i++) {
+     temp = temp + string.substring(string.length()-i, string.length()-i + 1);
+   }
+   System.out.println("Started with: " + string + "\nEnded with: " + temp);
+ }
+*/

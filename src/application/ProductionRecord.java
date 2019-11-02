@@ -1,12 +1,15 @@
 package application;
 
 /**
- * add the production record javadoc here bud make sure to mention why dateProduced is a long
- * instead of a date
+ * Class that represents a Production Record. Objects of this class get created whenever the "Record
+ * Production" button is pressed.
+ *
+ * @author Joshua Colicchio
  */
 public class ProductionRecord {
 
-  // Store the number of existing products of a certain ItemType
+  // Store the number of existing products of a certain ItemType.
+  // These get used when creating a new serial number.
   private static int auCount = 0;
   private static int viCount = 0;
   private static int amCount = 0;
@@ -20,48 +23,48 @@ public class ProductionRecord {
   private String serialNumber;
   private long dateProduced;
 
+  /**
+   * Constructor used when creating a new ProductionRecord.
+   *
+   * @param quantity How many products were produced in this run.
+   * @param product What product was produced.
+   */
   public ProductionRecord(int quantity, Product product) {
     this.QuantityProduced = quantity;
     this.productID = product.getId();
     this.serialNumber = generateSerialNumber(product);
     this.dateProduced = new java.util.Date().getTime();
     this.productRef = product;
-    switch (product.getType()) {
-      case AU:
-        auCount++;
-        break;
-      case VI:
-        viCount++;
-        break;
-      case AM:
-        amCount++;
-        break;
-      case VM:
-        vmCount++;
-        break;
-    }
+
+    // Originally this was in a switch statement, but it took up too many lines doing the same thing
+    // these do.
+    if (product.getType() == ItemType.AU) auCount++;
+    if (product.getType() == ItemType.VI) viCount++;
+    if (product.getType() == ItemType.AM) amCount++;
+    if (product.getType() == ItemType.VM) vmCount++;
   }
 
+  /**
+   * Constructor used when loading a ProductionRecord from the database.
+   *
+   * @param quantity How many products of this type were produced.
+   * @param serialNum The serial number associated with this ProductionRecord
+   * @param dateProduced The date when this ProductionRecord was created.
+   * @param prodRef The product that was created.
+   */
   public ProductionRecord(int quantity, String serialNum, long dateProduced, Product prodRef) {
     this.QuantityProduced = quantity;
     this.productID = prodRef.getId();
     this.serialNumber = serialNum;
     this.dateProduced = dateProduced;
     this.productRef = prodRef;
-    switch (prodRef.getType()) {
-      case AU:
-        auCount++;
-        break;
-      case VI:
-        viCount++;
-        break;
-      case AM:
-        amCount++;
-        break;
-      case VM:
-        vmCount++;
-        break;
-    }
+
+    // Originally this was in a switch statement, but it took up too many lines doing the same thing
+    // these do.
+    if (prodRef.getType() == ItemType.AU) auCount++;
+    if (prodRef.getType() == ItemType.VI) viCount++;
+    if (prodRef.getType() == ItemType.AM) amCount++;
+    if (prodRef.getType() == ItemType.VM) vmCount++;
   }
 
   /**

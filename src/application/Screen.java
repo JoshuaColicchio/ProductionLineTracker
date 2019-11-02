@@ -1,5 +1,10 @@
 package application;
 
+/**
+ * Class that represents all producible screens for MoviePlayers.
+ *
+ * @author Joshua Colicchio
+ */
 public class Screen implements ScreenSpec {
 
   private String resolution;

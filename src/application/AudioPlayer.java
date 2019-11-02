@@ -1,11 +1,21 @@
 package application;
 
+/**
+ * Class that represents a producible AudioPlayer device.
+ *
+ * @author Joshua Colicchio
+ */
 public class AudioPlayer extends Product implements MultimediaControl {
 
   private String supportedAudioFormats;
   private String supportedPlaylistFormats;
 
-  public AudioPlayer(int id, String prodName, String manuName, String supportedAudioFormats, String supportedPlaylistFormats) {
+  public AudioPlayer(
+      int id,
+      String prodName,
+      String manuName,
+      String supportedAudioFormats,
+      String supportedPlaylistFormats) {
     super(id, prodName, manuName, ItemType.AU);
     this.supportedAudioFormats = supportedAudioFormats;
     this.supportedPlaylistFormats = supportedPlaylistFormats;
@@ -32,8 +42,11 @@ public class AudioPlayer extends Product implements MultimediaControl {
   }
 
   @Override
-    public String toString() {
-      return super.toString() + "\nSupported Audio Formats: " + supportedAudioFormats +
-              "\nSupported Playlist Formats: " + supportedPlaylistFormats;
+  public String toString() {
+    return super.toString()
+        + "\nSupported Audio Formats: "
+        + supportedAudioFormats
+        + "\nSupported Playlist Formats: "
+        + supportedPlaylistFormats;
   }
 }

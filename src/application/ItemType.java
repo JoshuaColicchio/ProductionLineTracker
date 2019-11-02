@@ -16,7 +16,7 @@ public enum ItemType {
         return "AudioMobile";
       case VM:
         return "VisualMobile";
-      default: // This is impossible, but required.
+      default: // This is impossible, but it doesn't hurt to check.
         return "UNKNOWN TYPE - " + this.name();
     }
   }

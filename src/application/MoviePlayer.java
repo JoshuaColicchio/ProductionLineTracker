@@ -1,5 +1,10 @@
 package application;
 
+/**
+ * Class that represents all producible movie player type items. *
+ *
+ * @author Joshua Colicchio
+ */
 public class MoviePlayer extends Product implements MultimediaControl {
 
   private Screen screen;
