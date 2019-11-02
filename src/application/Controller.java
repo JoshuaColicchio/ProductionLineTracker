@@ -2,8 +2,8 @@ package application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -17,11 +17,10 @@ public class Controller {
   @FXML private TextField manufacturerTextField;
   @FXML private ChoiceBox<ItemType> itemTypeChoiceBox;
   @FXML private TableView<Product> existingProductsTableView;
-  @FXML private ListView<String> chooseProductListView;
+  @FXML private ListView<Product> chooseProductListView;
   @FXML private ComboBox<String> chooseQuantityComboBox;
   @FXML private TextArea productionLogTextArea;
   private Alert toolTipBox;
-  private ArrayList<Product> productionArrayList = new ArrayList<>();
   private HashMap<Integer, Product> productionHashMap = new HashMap<>();
 
   /** Method that is called when the "Add Product" button is pressed. */
@@ -66,12 +65,12 @@ public class Controller {
       return;
     }
 
+    // Make sure the quantity specified is a valid integer.
     try {
       ProductionRecord productionRecord =
           new ProductionRecord(
               Integer.parseInt(chooseQuantityComboBox.getValue()),
-              productionArrayList.get(
-                  chooseProductListView.getSelectionModel().getSelectedIndex()));
+              chooseProductListView.getSelectionModel().getSelectedItem());
 
       productionRecord.setProductionNumber(DatabaseManager.saveProductionRecord(productionRecord));
 
@@ -86,7 +85,6 @@ public class Controller {
     // Clear selection & reset quantity to 1
     chooseProductListView.getSelectionModel().selectFirst();
     chooseQuantityComboBox.setValue("1");
-
   }
 
   /** Method that is called when the program launches which initializes all default values. */
@@ -122,7 +120,7 @@ public class Controller {
             case "VisualMobile":
               System.out.println("visualmobile has not been implemented yet");
               return;
-            default:
+            default: // Should never reach this, but doesn't hurt to check.
               System.out.println("ERROR: Unknown product type: " + products.getString("TYPE"));
               return;
           }
@@ -164,6 +162,24 @@ public class Controller {
     chooseQuantityComboBox.getItems().addAll("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
     chooseQuantityComboBox.getSelectionModel().selectFirst();
 
+    // set up listview cell factory
+    chooseProductListView.setCellFactory(
+        new Callback<ListView<Product>, ListCell<Product>>() {
+          @Override
+          public ListCell<Product> call(ListView<Product> param) {
+            ListCell<Product> cell =
+                new ListCell<Product>() {
+                  @Override
+                  protected void updateItem(Product item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (item != null) setText(item.getManufacturer() + " " + item.getName());
+                    else setText("");
+                  }
+                };
+            return cell;
+          }
+        });
+
     // set up alert box
     toolTipBox = new Alert(Alert.AlertType.WARNING);
   }
@@ -175,9 +191,8 @@ public class Controller {
    * @param product Product to store and add.
    */
   public void addToExistingProducts(Product product) {
-    productionArrayList.add(product);
     productionHashMap.put(product.getId(), product);
     existingProductsTableView.getItems().add(product);
-    chooseProductListView.getItems().add(product.getManufacturer() + " " + product.getName());
+    chooseProductListView.getItems().add(product);
   }
 }
