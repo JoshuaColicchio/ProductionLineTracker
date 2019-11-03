@@ -5,7 +5,7 @@ package application;
  *
  * @author Joshua Colicchio
  */
-abstract class Product implements Item {
+public abstract class Product implements Item {
 
   private int id;
   private String name;

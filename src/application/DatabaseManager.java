@@ -27,22 +27,11 @@ class DatabaseManager {
    * @param itemType Item type of the new product.
    */
   public static int addProduct(String prodName, String manuName, ItemType itemType) {
-    ResultSet rs =
-        insert(
-            "INSERT INTO PRODUCT (NAME, TYPE, MANUFACTURER) VALUES (?,?,?)",
-            prodName,
-            itemType.toString(),
-            manuName);
-
-    try {
-      if (rs != null && rs.next()) {
-        return rs.getInt(1);
-      }
-    } catch (Exception ex) {
-      System.out.println(
-          "Exception in DatabaseManager.addProduct\nReason: " + ex.getLocalizedMessage());
-    }
-    return -1;
+    return insert(
+        "INSERT INTO PRODUCT (NAME, TYPE, MANUFACTURER) VALUES (?,?,?)",
+        prodName,
+        itemType.toString(),
+        manuName);
   }
 
   /**
@@ -163,7 +152,7 @@ class DatabaseManager {
    * @param params Any values that should be inserted into the PreparedStatement upon creation.
    * @return ResultSet containing the generated keys.
    */
-  private static ResultSet insert(String query, Object... params) {
+  private static int insert(String query, Object... params) {
     Connection connection = null;
     PreparedStatement pstmt = null;
 
@@ -187,7 +176,10 @@ class DatabaseManager {
         }
 
         pstmt.executeUpdate();
-        return pstmt.getGeneratedKeys();
+        ResultSet rs = pstmt.getGeneratedKeys();
+        if (rs.next()) {
+          return rs.getInt(1);
+        }
       } else {
         throw new Exception("Could not establish connection.");
       }
@@ -217,7 +209,7 @@ class DatabaseManager {
         }
       }
     }
-    return null;
+    return -1;
   }
 
   private static void closeConnection(
