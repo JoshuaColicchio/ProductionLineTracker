@@ -78,3 +78,6 @@ In addition to the ability to record production, the software also needs the abi
   
 # Class Diagram for Sprint 1
 ![Alt text](https://github.com/JoshuaColicchio/ProductionLineTracker/blob/master/Package%20application.png?raw=true "Class Diagram Sprint 1")  
+  
+# Class Diagram for Sprint 2
+![Alt text](https://github.com/JoshuaColicchio/ProductionLineTracker/blob/master/Package%20application%202.png "Class Diagram Sprint 2")  
