@@ -1,5 +1,6 @@
 package application;
 
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * This is the database driver class. It handles all database interactions.
@@ -47,8 +49,7 @@ class DatabaseManager {
 
     try {
       // establish connection
-      Class.forName("org.h2.Driver");
-      connection = DriverManager.getConnection("jdbc:h2:./res/productiontracker");
+      connection = getConnection();
       statement = connection.createStatement();
       resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
       while (resultSet.next()) {
@@ -121,7 +122,7 @@ class DatabaseManager {
     try {
       // establish connection
       Class.forName("org.h2.Driver");
-      connection = DriverManager.getConnection("jdbc:h2:./res/productiontracker");
+      connection = getConnection();
       statement = connection.createStatement();
       resultSet = statement.executeQuery("SELECT * FROM PRODUCTION_RECORD");
       while (resultSet.next()) {
@@ -159,7 +160,7 @@ class DatabaseManager {
     try {
       // establish connection
       Class.forName("org.h2.Driver");
-      connection = DriverManager.getConnection("jdbc:h2:./res/productiontracker");
+      connection = getConnection();
 
       // ensure valid connection
       if (connection != null) {
@@ -210,6 +211,20 @@ class DatabaseManager {
       }
     }
     return -1;
+  }
+
+  private static Connection getConnection() {
+    try {
+      Properties prop = new Properties();
+      prop.load(new FileInputStream("res/properties"));
+      String PASS = prop.getProperty("password");
+      Class.forName("org.h2.Driver");
+      return DriverManager.getConnection("jdbc:h2:./res/productiontracker", "ADMIN", PASS);
+    } catch (Exception ex) {
+      System.out.println(
+          "Error obtaining connection to the database.\nReason: " + ex.getLocalizedMessage());
+    }
+    return null;
   }
 
   private static void closeConnection(

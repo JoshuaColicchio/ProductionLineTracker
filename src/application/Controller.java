@@ -1,15 +1,10 @@
 package application;
 
 import java.util.List;
+
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.Callback;
 
 /**
@@ -28,6 +23,10 @@ public class Controller {
   @FXML private ListView<Product> chooseProductListView;
   @FXML private ComboBox<String> chooseQuantityComboBox;
   @FXML private TextArea productionLogTextArea;
+  @FXML private TextField newEmpName;
+  @FXML private PasswordField newEmpPassword;
+  @FXML private TextArea newEmpResultDisplay;
+  @FXML private Button newEmpSubmitBtn;
   private Alert toolTipBox;
 
   /** Method that is called when the "Add Product" button is pressed. */
@@ -94,6 +93,34 @@ public class Controller {
     // Clear selection & reset quantity to 1
     chooseProductListView.getSelectionModel().selectFirst();
     chooseQuantityComboBox.setValue("1");
+  }
+
+  @FXML
+  public void onNewEmployeeSubmit() {
+    // Ensure name is filled in
+    if (newEmpName.getText().trim().isEmpty()) {
+      toolTipBox.setContentText("Name cannot be empty!");
+      toolTipBox.show();
+      return;
+    }
+    // Ensure password is filled in
+    if (newEmpPassword.getText().trim().isEmpty()) {
+      toolTipBox.setContentText("Password cannot be empty!");
+      toolTipBox.show();
+      return;
+    }
+
+    Employee emp = new Employee(newEmpName.getText(), newEmpPassword.getText());
+
+    String name = newEmpName.getText();
+
+    String username =
+        name.toLowerCase().charAt(0) + name.substring(name.indexOf(' ') + 1).toLowerCase();
+
+    // tim.lee@oracleacademy.Test
+    String email = name.replace(' ', '.').toLowerCase() + "@oracleacademy.Test";
+
+    newEmpResultDisplay.setText(emp.toString());
   }
 
   /** Method that is called when the program launches which initializes all default values. */

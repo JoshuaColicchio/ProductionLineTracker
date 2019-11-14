@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -15,6 +16,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
 <!--
@@ -82,6 +84,20 @@
     <Tab text="Production Log">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <TextArea fx:id="productionLogTextArea" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="344.0" prefWidth="770.0" />
+        </AnchorPane>
+    </Tab>
+    <Tab text="Employees">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+            <Pane layoutX="-1.0" prefHeight="373.0" prefWidth="800.0">
+                <Label layoutX="68.0" layoutY="47.0" prefHeight="17.0" prefWidth="71.0" text="Full Name:"/>
+                <TextField fx:id="newEmpName" layoutX="139.0" layoutY="43.0"/>
+                <Label layoutX="68.0" layoutY="87.0" text="Password:"/>
+                <PasswordField fx:id="newEmpPassword" layoutX="139.0" layoutY="83.0"/>
+                <TextArea fx:id="newEmpResultDisplay" layoutX="68.0" layoutY="184.0" prefHeight="163.0"
+                          prefWidth="645.0" editable="false"/>
+                <Button fx:id="newEmpSubmitBtn" layoutX="230.0" layoutY="132.0" mnemonicParsing="false"
+                        text="Submit" onAction="#onNewEmployeeSubmit"/>
+            </Pane>
         </AnchorPane>
     </Tab>
 </TabPane>
