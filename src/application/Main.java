@@ -27,10 +27,20 @@ public class Main extends Application {
     scene.getStylesheets().add(Main.class.getResource("stylesheet.css").toExternalForm());
     primaryStage.setScene(scene);
     primaryStage.show();
+    System.out.println(reverseString("helloworld"));
   }
 
   public static void main(String[] args) {
     launch(args);
+  }
+
+  public String reverseString(String pw) {
+    String temp = pw.substring(pw.length() - 1);
+    if (pw.length() > 1) {
+      pw = pw.substring(0, pw.length() - 1);
+      return temp + reverseString(pw);
+    }
+    return temp;
   }
 }
 

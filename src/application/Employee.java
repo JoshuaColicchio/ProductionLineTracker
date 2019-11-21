@@ -38,16 +38,13 @@ public class Employee {
     return true;
   }
 
-  private void isValidPassword(String password) {
-    /*The constructor will call isValidPassword. If the password is valid (containing a lowercase letter, uppercase letter,
-    and a special character) the password field gets set to the supplied password. If the password is invalid,
-    the password field gets set to "pw".*/
-
-    if (password.matches("/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]")) {
+  private boolean isValidPassword(String password) {
+    if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).+$")) {
       this.password = password;
-    } else {
-      this.password = "pw";
+      return true;
     }
+    this.password = "pw";
+    return false;
   }
 
   public String toString() {

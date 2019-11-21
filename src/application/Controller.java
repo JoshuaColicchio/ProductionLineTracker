@@ -26,7 +26,6 @@ public class Controller {
   @FXML private TextField newEmpName;
   @FXML private PasswordField newEmpPassword;
   @FXML private TextArea newEmpResultDisplay;
-  @FXML private Button newEmpSubmitBtn;
   private Alert toolTipBox;
 
   /** Method that is called when the "Add Product" button is pressed. */
@@ -71,14 +70,17 @@ public class Controller {
       return;
     }
 
-    // Make sure the quantity specified is a valid integer.
     try {
+      // Make sure the quantity specified is a valid integer.
+      int quantity = Integer.parseInt(chooseQuantityComboBox.getValue());
+      if (quantity < 0) {
+        throw new NumberFormatException("Negative number not allowed.");
+      }
+
       ProductionRecord productionRecord =
           new ProductionRecord(
               Integer.parseInt(chooseQuantityComboBox.getValue()),
               chooseProductListView.getSelectionModel().getSelectedItem());
-
-      DatabaseManager.saveProductionRecord(productionRecord);
 
       if (productionLogTextArea.getText().trim().isEmpty()) {
         productionLogTextArea.setText(productionRecord.toString());
@@ -88,6 +90,7 @@ public class Controller {
     } catch (NumberFormatException nfe) {
       toolTipBox.setContentText("Invalid Quantity!");
       toolTipBox.show();
+      return;
     }
 
     // Clear selection & reset quantity to 1
@@ -111,15 +114,6 @@ public class Controller {
     }
 
     Employee emp = new Employee(newEmpName.getText(), newEmpPassword.getText());
-
-    String name = newEmpName.getText();
-
-    String username =
-        name.toLowerCase().charAt(0) + name.substring(name.indexOf(' ') + 1).toLowerCase();
-
-    // tim.lee@oracleacademy.Test
-    String email = name.replace(' ', '.').toLowerCase() + "@oracleacademy.Test";
-
     newEmpResultDisplay.setText(emp.toString());
   }
 

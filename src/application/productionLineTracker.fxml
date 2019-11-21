@@ -90,12 +90,12 @@
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <Pane layoutX="-1.0" prefHeight="373.0" prefWidth="800.0">
                 <Label layoutX="68.0" layoutY="47.0" prefHeight="17.0" prefWidth="71.0" text="Full Name:"/>
-                <TextField fx:id="newEmpName" layoutX="139.0" layoutY="43.0"/>
+                <TextField fx:id="newEmpName" layoutX="139.0" layoutY="43.0" onAction="#onNewEmployeeSubmit"/>
                 <Label layoutX="68.0" layoutY="87.0" text="Password:"/>
-                <PasswordField fx:id="newEmpPassword" layoutX="139.0" layoutY="83.0"/>
+                <PasswordField fx:id="newEmpPassword" layoutX="139.0" layoutY="83.0" onAction="#onNewEmployeeSubmit"/>
                 <TextArea fx:id="newEmpResultDisplay" layoutX="68.0" layoutY="184.0" prefHeight="163.0"
                           prefWidth="645.0" editable="false"/>
-                <Button fx:id="newEmpSubmitBtn" layoutX="230.0" layoutY="132.0" mnemonicParsing="false"
+                <Button layoutX="230.0" layoutY="132.0" mnemonicParsing="false"
                         text="Submit" onAction="#onNewEmployeeSubmit"/>
             </Pane>
         </AnchorPane>
