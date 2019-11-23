@@ -75,9 +75,21 @@ class DatabaseManager {
                     new Screen("1920x1080", 144, 22),
                     MonitorType.LED);
           } else if (resultSet.getString("TYPE").compareTo("AudioMobile") == 0) {
-            System.out.println("audio mobile has not been implemented yet");
+            temp =
+                new AudioPlayer(
+                    resultSet.getInt("ID"),
+                    resultSet.getString("NAME"),
+                    resultSet.getString("MANUFACTURER"),
+                    resultSet.getString("TYPE"),
+                    "MP3");
           } else if (resultSet.getString("TYPE").compareTo("VisualMobile") == 0) {
-            System.out.println("visual mobile has not been implemented yet");
+            temp =
+                new MoviePlayer(
+                    resultSet.getInt("ID"),
+                    resultSet.getString("NAME"),
+                    resultSet.getString("MANUFACTURER"),
+                    new Screen("1920x1080", 144, 22),
+                    MonitorType.LCD);
           }
 
           if (temp != null) {
