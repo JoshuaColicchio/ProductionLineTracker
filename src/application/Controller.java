@@ -1,14 +1,22 @@
 package application;
 
 import java.util.List;
-
-import javafx.event.EventHandler;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
- * Controller class used to manage GUI object interactions.
+ * Class that manages all GUI object interactions.
  *
  * @author Joshua Colicchio
  */
@@ -26,20 +34,18 @@ public class Controller {
   @FXML private TextField newEmpName;
   @FXML private PasswordField newEmpPassword;
   @FXML private TextArea newEmpResultDisplay;
-  private Alert toolTipBox;
+  private static Alert toolTipBox;
 
   /** Method that is called when the "Add Product" button is pressed. */
   @FXML
   public void addProductBtnPushed() {
     if (productNameTextField.getText().trim().isEmpty()) {
-      toolTipBox.setContentText("\"Product Name\" must not be empty!");
-      toolTipBox.show();
+      throwAlert(Alert.AlertType.WARNING, "\"Product Name\" must not be empty!", false);
       return;
     }
 
     if (manufacturerTextField.getText().trim().isEmpty()) {
-      toolTipBox.setContentText("\"Manufacturer\" must not be empty!");
-      toolTipBox.show();
+      throwAlert(Alert.AlertType.WARNING, "\"Manufacturer\" must not be empty!", false);
       return;
     }
 
@@ -65,8 +71,7 @@ public class Controller {
   @FXML
   public void recordProductBtnPushed() {
     if (chooseProductListView.getSelectionModel().getSelectedItem() == null) {
-      toolTipBox.setContentText("No product selected!");
-      toolTipBox.show();
+      throwAlert(Alert.AlertType.WARNING, "No product selected!", false);
       return;
     }
 
@@ -82,14 +87,15 @@ public class Controller {
               Integer.parseInt(chooseQuantityComboBox.getValue()),
               chooseProductListView.getSelectionModel().getSelectedItem());
 
+      DatabaseManager.saveProductionRecord(productionRecord);
+
       if (productionLogTextArea.getText().trim().isEmpty()) {
         productionLogTextArea.setText(productionRecord.toString());
       } else {
         productionLogTextArea.appendText("\n" + productionRecord.toString());
       }
     } catch (NumberFormatException nfe) {
-      toolTipBox.setContentText("Invalid Quantity!");
-      toolTipBox.show();
+      throwAlert(Alert.AlertType.WARNING, "Invalid Quantity!\n" + nfe.getLocalizedMessage(), false);
       return;
     }
 
@@ -98,18 +104,17 @@ public class Controller {
     chooseQuantityComboBox.setValue("1");
   }
 
+  /** Method that is called when the 'Submit' button is pressed on the Employee tab. */
   @FXML
   public void onNewEmployeeSubmit() {
     // Ensure name is filled in
     if (newEmpName.getText().trim().isEmpty()) {
-      toolTipBox.setContentText("Name cannot be empty!");
-      toolTipBox.show();
+      throwAlert(Alert.AlertType.WARNING, "Name cannot be empty!", false);
       return;
     }
     // Ensure password is filled in
     if (newEmpPassword.getText().trim().isEmpty()) {
-      toolTipBox.setContentText("Password cannot be empty!");
-      toolTipBox.show();
+      throwAlert(Alert.AlertType.WARNING, "Password cannot be empty!", false);
       return;
     }
 
@@ -163,9 +168,6 @@ public class Controller {
             };
           }
         });
-
-    // set up alert box
-    toolTipBox = new Alert(Alert.AlertType.WARNING);
   }
 
   /**
@@ -177,5 +179,33 @@ public class Controller {
   private void addToExistingProducts(Product product) {
     existingProductsTableView.getItems().add(product);
     chooseProductListView.getItems().add(product);
+  }
+
+  /**
+   * Method that handles all errors/warnings that may occur during runtime.
+   *
+   * @param alertType Type of the alert.
+   * @param context The message to display on the alert.
+   * @param isFatal If true, the application will close when the alert box is closed.
+   */
+  public static void throwAlert(Alert.AlertType alertType, String context, boolean isFatal) {
+    toolTipBox = new Alert(alertType);
+    toolTipBox.setContentText(context);
+
+    // Force alert to the front
+    ((Stage) toolTipBox.getDialogPane().getScene().getWindow()).setAlwaysOnTop(true);
+
+    if (isFatal) {
+      toolTipBox.setContentText(context + "\n\n\nThe application will now close.");
+      toolTipBox.setOnCloseRequest(
+          e -> {
+            Platform.exit();
+            System.exit(0);
+          });
+    } else {
+      // reset the Alert for the next time
+      toolTipBox.setOnCloseRequest(e -> toolTipBox = null);
+    }
+    toolTipBox.show();
   }
 }

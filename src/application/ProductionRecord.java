@@ -19,7 +19,7 @@ class ProductionRecord {
   private final int productID;
   private final String serialNumber;
   private final long dateProduced;
-  private Product productRef;
+  private final Product productRef;
 
   /**
    * Constructor used when creating a new ProductionRecord.
@@ -106,15 +106,6 @@ class ProductionRecord {
    */
   public java.util.Date getDateProduced() {
     return new java.util.Date(dateProduced);
-  }
-
-  /**
-   * Method to change the Product that this Production Record references.
-   *
-   * @param productRef New Product to reference.
-   */
-  public void setProductRef(Product productRef) {
-    this.productRef = productRef;
   }
 
   /**

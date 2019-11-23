@@ -1,5 +1,10 @@
 package application;
 
+/**
+ * Interface that outlines all required functions for an Item.
+ *
+ * @author Joshua Colicchio
+ */
 interface Item {
 
   /*

@@ -1,5 +1,10 @@
 package application;
 
+/**
+ * Enum of all ItemTypes that an Item can be.
+ *
+ * @author Joshua Colicchio
+ */
 public enum ItemType {
   AU,
   VI,

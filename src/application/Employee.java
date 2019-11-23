@@ -1,50 +1,78 @@
 package application;
 
-public class Employee {
+/**
+ * Class that represents an Employee.
+ *
+ * @author Joshua Colicchio
+ */
+class Employee {
 
-  StringBuilder name;
-  String username;
-  String password;
-  String email;
+  private final StringBuilder name;
+  private final String password;
+  private String username;
+  private String email;
 
+  /**
+   * Constructor for a new Employee object.
+   *
+   * @param name The Employee's full name.
+   * @param password The Employee's password.
+   */
   public Employee(String name, String password) {
     this.name = new StringBuilder(name);
-    checkName(this.name);
-    isValidPassword(password);
+    if (checkName(this.name)) {
+      setUsername(this.name);
+      setEmail(this.name);
+    } else {
+      username = "default";
+      email = "user@oracleacademy.Test";
+    }
+
+    if (isValidPassword(password)) {
+      this.password = password;
+    } else {
+      this.password = "pw";
+    }
   }
 
+  /**
+   * Method that sets / creates the Employee's username.
+   *
+   * @param name The Employee's name.
+   */
   private void setUsername(StringBuilder name) {
     this.username =
         name.toString().toLowerCase().charAt(0)
             + name.toString().substring(name.indexOf(" ") + 1).toLowerCase();
   }
 
+  /**
+   * Method that sets / creates the Employee's email address.
+   *
+   * @param name The Employee's name.
+   */
   private void setEmail(StringBuilder name) {
     this.email = name.toString().replace(' ', '.').toLowerCase() + "@oracleacademy.Test";
   }
 
-  private void createUsername(StringBuilder name) {}
-
+  /**
+   * Method that checks whether or not the Employee has entered a valid name.
+   *
+   * @param name The name to check.
+   * @return True if the name is valid.
+   */
   private boolean checkName(StringBuilder name) {
-    if (name.indexOf(" ") != -1) {
-      // contains a space
-      setUsername(name);
-      setEmail(name);
-    } else {
-      // does not contain a space
-      username = "default";
-      email = "user@oracleacademy.Test";
-    }
-    return true;
+    return name.indexOf(" ") != -1;
   }
 
+  /**
+   * Method that checks whether or not the Employee has entered a valid password.
+   *
+   * @param password The password that the Employee has entered.
+   * @return Returns true if the password is valid.
+   */
   private boolean isValidPassword(String password) {
-    if (password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).+$")) {
-      this.password = password;
-      return true;
-    }
-    this.password = "pw";
-    return false;
+    return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).+$");
   }
 
   public String toString() {

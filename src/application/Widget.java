@@ -1,8 +1,9 @@
 package application;
 
 /**
- * 'Temporary' class used to test functionality.
+ * Class that used to test functionality.
  *
+ * @deprecated Use {@link AudioPlayer} or {@link MoviePlayer} instead.
  * @author Joshua Colicchio
  */
 class Widget extends Product {
