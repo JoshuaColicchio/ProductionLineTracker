@@ -223,6 +223,10 @@ class DatabaseManager {
       Properties prop = new Properties();
       prop.load(new FileInputStream("res/properties"));
       String password = reverseString(prop.getProperty("password"));
+
+      // Check if the database is valid.
+      new FileInputStream("res/ProductionTracker.mv.db");
+
       Class.forName("org.h2.Driver");
       return DriverManager.getConnection("jdbc:h2:./res/productiontracker", "ADMIN", password);
     } catch (NullPointerException npe) {
@@ -236,7 +240,8 @@ class DatabaseManager {
       Controller.throwAlert(
           Alert.AlertType.ERROR,
           "Unable to connect to the database."
-              + "\nCould not find the Database properties file (res/properties).",
+              + "\nPlease ensure that both the database (res/ProductionTracker.mv.db) and the properties "
+              + "(res/properties) files are not missing.",
           true);
     } catch (Exception ex) {
       Controller.throwAlert(
