@@ -8,8 +8,7 @@ We were given an outline of exactly what we were expected to do for this project
 ![Demo Gif](docs/program.gif) 
 
 ## Documentation
-
-I cannot make use of GitHub Pages until the repository is public without upgrading to GitHub Pro. Once you allow us to make our repo's public, I'll add this section.
+[JavaDoc](https://joshuacolicchio.github.io/ProductionLineTracker/)
 
 ## Diagrams
 
