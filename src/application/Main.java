@@ -12,13 +12,6 @@ import javafx.stage.Stage;
  * @author Joshua Colicchio
  */
 public class Main extends Application {
-
-  /**
-   * The starting point of this JavaFX application.
-   *
-   * @param primaryStage The primary stage of the JavaFX application.
-   * @throws Exception Throws exception if an error occurs.
-   */
   @Override
   public void start(Stage primaryStage) throws Exception {
     Parent root = FXMLLoader.load(getClass().getResource("productionLineTracker.fxml"));

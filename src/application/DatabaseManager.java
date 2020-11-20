@@ -23,14 +23,6 @@ class DatabaseManager {
 
   private static final HashMap<Integer, Product> allProducts = new HashMap<>();
 
-  /**
-   * Method to add a new Product to the database.
-   *
-   * @param prodName Name of the new Product.
-   * @param manuName Name of the manufacturer of the new Product.
-   * @param itemType Item type of the new Product.
-   * @return The ID of the new Product in the database.
-   */
   public static int addProduct(String prodName, String manuName, ItemType itemType) {
     return insert(
         "INSERT INTO PRODUCT (NAME, TYPE, MANUFACTURER) VALUES (?,?,?)",
@@ -39,11 +31,6 @@ class DatabaseManager {
         manuName);
   }
 
-  /**
-   * Method to load all existing products from the database.
-   *
-   * @return ResultSet containing all products in the database.
-   */
   public static List<Product> loadProducts() {
     Connection connection = null;
     Statement statement = null;
@@ -51,47 +38,12 @@ class DatabaseManager {
     List<Product> products = new ArrayList<>();
 
     try {
-      // establish connection
       connection = getConnection();
       if (connection != null) {
         statement = connection.createStatement();
         resultSet = statement.executeQuery("SELECT * FROM PRODUCT");
         while (resultSet.next()) {
-          Product temp = null;
-          if (resultSet.getString("TYPE").compareTo("Audio") == 0) {
-            temp =
-                new AudioPlayer(
-                    resultSet.getInt("ID"),
-                    resultSet.getString("NAME"),
-                    resultSet.getString("MANUFACTURER"),
-                    resultSet.getString("TYPE"),
-                    "MP3");
-          } else if (resultSet.getString("TYPE").compareTo("Visual") == 0) {
-            temp =
-                new MoviePlayer(
-                    resultSet.getInt("ID"),
-                    resultSet.getString("NAME"),
-                    resultSet.getString("MANUFACTURER"),
-                    new Screen("1920x1080", 144, 22),
-                    MonitorType.LED);
-          } else if (resultSet.getString("TYPE").compareTo("AudioMobile") == 0) {
-            temp =
-                new AudioPlayer(
-                    resultSet.getInt("ID"),
-                    resultSet.getString("NAME"),
-                    resultSet.getString("MANUFACTURER"),
-                    resultSet.getString("TYPE"),
-                    "MP3");
-          } else if (resultSet.getString("TYPE").compareTo("VisualMobile") == 0) {
-            temp =
-                new MoviePlayer(
-                    resultSet.getInt("ID"),
-                    resultSet.getString("NAME"),
-                    resultSet.getString("MANUFACTURER"),
-                    new Screen("1920x1080", 144, 22),
-                    MonitorType.LCD);
-          }
-
+          Product temp = Product.createProduct(resultSet);
           if (temp != null) {
             products.add(temp);
             allProducts.put(temp.getId(), temp);
@@ -109,11 +61,6 @@ class DatabaseManager {
     return products;
   }
 
-  /**
-   * Method to save a ProductionRecord to the database.
-   *
-   * @param prodRec ProductionRecord object that you want to be saved to the database.
-   */
   public static void saveProductionRecord(ProductionRecord prodRec) {
     insert(
         "INSERT INTO PRODUCTION_RECORD (PRODUCT_ID, QUANTITY_PRODUCED, SERIAL_NUM, DATE_PRODUCED) "
@@ -124,11 +71,6 @@ class DatabaseManager {
         prodRec.getDateProduced().getTime());
   }
 
-  /**
-   * Method to load all existing production records from the database.
-   *
-   * @return ResultSet containing all production records in the database.
-   */
   public static List<ProductionRecord> loadProductionRecords() {
     Connection connection = null;
     Statement statement = null;
@@ -136,7 +78,6 @@ class DatabaseManager {
     List<ProductionRecord> productionRecords = new ArrayList<>();
 
     try {
-      // establish connection
       Class.forName("org.h2.Driver");
       connection = getConnection();
       if (connection != null) {
@@ -166,19 +107,11 @@ class DatabaseManager {
     return productionRecords;
   }
 
-  /**
-   * General method to insert data into the database. For internal use only.
-   *
-   * @param query Query String to execute.
-   * @param params Any values that should be inserted into the PreparedStatement upon creation.
-   * @return ResultSet containing the generated keys.
-   */
   private static int insert(String query, Object... params) {
     Connection connection = null;
     PreparedStatement pstmt = null;
 
     try {
-      // establish connection
       Class.forName("org.h2.Driver");
       connection = getConnection();
 
@@ -213,11 +146,6 @@ class DatabaseManager {
     return -1;
   }
 
-  /**
-   * General method to create a new connection to the database.
-   *
-   * @return The newly created connection.
-   */
   private static Connection getConnection() {
     try {
       Properties prop = new Properties();
@@ -253,12 +181,6 @@ class DatabaseManager {
     return null;
   }
 
-  /**
-   * This method reverses whatever string is passed to it.
-   *
-   * @param pw The string to reverse.
-   * @return The reversed string.
-   */
   private static String reverseString(String pw) {
     String temp = pw.substring(pw.length() - 1);
     if (pw.length() > 1) {
@@ -268,14 +190,6 @@ class DatabaseManager {
     return temp;
   }
 
-  /**
-   * Method that ensures all database connections are closed when no longer needed.
-   *
-   * @param connection The Connection to close.
-   * @param preparedStatement The PreparedStatement to close.
-   * @param statement The Statement to close.
-   * @param resultSet The ResultSet to close.
-   */
   private static void closeConnection(
       Connection connection,
       PreparedStatement preparedStatement,

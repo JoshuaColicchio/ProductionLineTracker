@@ -5,36 +5,26 @@ package application;
  *
  * @author Joshua Colicchio
  */
-public class Screen implements ScreenSpec {
+public class Screen {
 
   private final String resolution;
   private final int refreshRate;
   private final int responseTime;
 
-  /**
-   * Constructor for a Screen object.
-   *
-   * @param resolution The Screen's resolution.
-   * @param refreshRate The Screen's refresh rate.
-   * @param responseTime The Screen's response time.
-   */
   public Screen(String resolution, int refreshRate, int responseTime) {
     this.resolution = resolution;
     this.refreshRate = refreshRate;
     this.responseTime = responseTime;
   }
 
-  @Override
   public String getResolution() {
     return resolution;
   }
 
-  @Override
   public int getRefreshRate() {
     return refreshRate;
   }
 
-  @Override
   public int getResponseTime() {
     return responseTime;
   }

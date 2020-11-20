@@ -20,8 +20,7 @@ import javafx.util.Callback;
  *
  * @author Joshua Colicchio
  */
-// Despite what IntelliJ says, this CANNOT be package private. The FXML page will be unable to load.
-@SuppressWarnings("WeakerAccess") // So I suppress this warning.
+@SuppressWarnings("WeakerAccess")
 public class Controller {
 
   @FXML private TextField productNameTextField;
@@ -36,47 +35,35 @@ public class Controller {
   @FXML private TextArea newEmpResultDisplay;
   private static Alert toolTipBox;
 
-  /** Method that is called when the "Add Product" button is pressed. */
   @FXML
-  public void addProductBtnPushed() {
+  private void addProductBtnPushed() {
     if (productNameTextField.getText().trim().isEmpty()) {
       throwAlert(Alert.AlertType.WARNING, "\"Product Name\" must not be empty!", false);
-      return;
-    }
-
-    if (manufacturerTextField.getText().trim().isEmpty()) {
+    } else if (manufacturerTextField.getText().trim().isEmpty()) {
       throwAlert(Alert.AlertType.WARNING, "\"Manufacturer\" must not be empty!", false);
-      return;
+    } else {
+      int prodId = DatabaseManager.addProduct(productNameTextField.getText(), manufacturerTextField.getText(),
+              itemTypeChoiceBox.getValue());
+
+      addToExistingProducts(
+              Product.createProduct(prodId, productNameTextField.getText(), manufacturerTextField.getText(),
+              itemTypeChoiceBox.getValue()));
+
+      // Clear out the fields after use.
+      productNameTextField.setText("");
+      manufacturerTextField.setText("");
+      itemTypeChoiceBox.getSelectionModel().selectFirst();
     }
-
-    int prodId =
-        DatabaseManager.addProduct(
-            productNameTextField.getText(),
-            manufacturerTextField.getText(),
-            itemTypeChoiceBox.getValue());
-    addToExistingProducts(
-        new Widget(
-            prodId,
-            productNameTextField.getText(),
-            manufacturerTextField.getText(),
-            itemTypeChoiceBox.getValue()));
-
-    // Clear out the fields after use.
-    productNameTextField.setText("");
-    manufacturerTextField.setText("");
-    itemTypeChoiceBox.getSelectionModel().selectFirst();
   }
 
-  /** Method that is called when the "Record Product" button is pressed. */
   @FXML
-  public void recordProductBtnPushed() {
+  private void recordProductBtnPushed() {
     if (chooseProductListView.getSelectionModel().getSelectedItem() == null) {
       throwAlert(Alert.AlertType.WARNING, "No product selected!", false);
       return;
     }
 
     try {
-      // Make sure the quantity specified is a valid integer.
       int quantity = Integer.parseInt(chooseQuantityComboBox.getValue());
       if (quantity < 0) {
         throw new NumberFormatException("Negative number not allowed.");
@@ -104,25 +91,17 @@ public class Controller {
     chooseQuantityComboBox.setValue("1");
   }
 
-  /** Method that is called when the 'Submit' button is pressed on the Employee tab. */
   @FXML
-  public void onNewEmployeeSubmit() {
-    // Ensure name is filled in
+  private void onNewEmployeeSubmit() {
     if (newEmpName.getText().trim().isEmpty()) {
       throwAlert(Alert.AlertType.WARNING, "Name cannot be empty!", false);
-      return;
-    }
-    // Ensure password is filled in
-    if (newEmpPassword.getText().trim().isEmpty()) {
+    } else if (newEmpPassword.getText().trim().isEmpty()) {
       throwAlert(Alert.AlertType.WARNING, "Password cannot be empty!", false);
-      return;
+    } else {
+      newEmpResultDisplay.setText(new Employee(newEmpName.getText(), newEmpPassword.getText()).toString());
     }
-
-    Employee emp = new Employee(newEmpName.getText(), newEmpPassword.getText());
-    newEmpResultDisplay.setText(emp.toString());
   }
 
-  /** Method that is called when the program launches which initializes all default values. */
   public void initialize() {
     // Load all existing products from the database.
     List<Product> products = DatabaseManager.loadProducts();
@@ -170,29 +149,15 @@ public class Controller {
         });
   }
 
-  /**
-   * Method that takes a product, stores it, and adds it to the existing products TableView, and the
-   * products ListView.
-   *
-   * @param product Product to store and add.
-   */
   private void addToExistingProducts(Product product) {
     existingProductsTableView.getItems().add(product);
     chooseProductListView.getItems().add(product);
   }
 
-  /**
-   * Method that handles all errors/warnings that may occur during runtime.
-   *
-   * @param alertType Type of the alert.
-   * @param context The message to display on the alert.
-   * @param isFatal If true, the application will close when the alert box is closed.
-   */
   public static void throwAlert(Alert.AlertType alertType, String context, boolean isFatal) {
     toolTipBox = new Alert(alertType);
     toolTipBox.setContentText(context);
 
-    // Force alert to the front
     ((Stage) toolTipBox.getDialogPane().getScene().getWindow()).setAlwaysOnTop(true);
 
     if (isFatal) {

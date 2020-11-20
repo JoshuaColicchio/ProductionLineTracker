@@ -1,25 +1,20 @@
 package application;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Class that represents a base product. All producible objects inherit from this class.
  *
  * @author Joshua Colicchio
  */
-public abstract class Product implements Item {
+public abstract class Product {
 
   private int id;
   private String name;
   private String manufacturer;
   private ItemType type;
 
-  /**
-   * Constructor for a new Product object.
-   *
-   * @param id The Product's ID.
-   * @param name The Product's name.
-   * @param manu The Product's manufacturer.
-   * @param type The Product's type.
-   */
   Product(int id, String name, String manu, ItemType type) {
     this.id = id;
     this.name = name;
@@ -27,81 +22,66 @@ public abstract class Product implements Item {
     this.type = type;
   }
 
-  /**
-   * Method to set the Product's ID.
-   *
-   * @param newId The new ID to set this Product's ID to.
-   */
+  public static Product createProduct(ResultSet resultSet) {
+    try {
+      switch (resultSet.getString("TYPE")) {
+        case "Audio":
+        case "AudioMobile":
+          return new AudioPlayer(
+                  resultSet.getInt("ID"), resultSet.getString("NAME"),
+                  resultSet.getString("MANUFACTURER"), resultSet.getString("TYPE"),
+                  "MP3");
+        case "Visual":
+        case "VisualMobile":
+          return new MoviePlayer(
+                  resultSet.getInt("ID"), resultSet.getString("NAME"),
+                  resultSet.getString("MANUFACTURER"),
+                  new Screen("1920x1080", 144, 22), MonitorType.LED);
+      }
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+    }
+    return null;
+  }
+
+  public static Product createProduct(int productId, String name, String manufacturer, ItemType type) {
+    return switch (type.toString()) {
+      case "Audio", "AudioMobile" -> new AudioPlayer(productId, name, manufacturer, type.toString(), "MP3");
+      case "Visual", "VisualMobile" -> new MoviePlayer(
+              productId, name, manufacturer,
+              new Screen("1920x1080", 144, 22), MonitorType.LED);
+      default -> null;
+    };
+  }
+
   public void setId(int newId) {
     id = newId;
   }
 
-  /**
-   * Method to retrieve this Product's ID.
-   *
-   * @return This Product's ID.
-   */
-  @Override
   public int getId() {
     return id;
   }
 
-  /**
-   * Method to set this Product's name.
-   *
-   * @param newName The new name for this Product.
-   */
-  @Override
   public void setName(String newName) {
     name = newName;
   }
 
-  /**
-   * Method to retrieve this Product's name.
-   *
-   * @return This Product's name.
-   */
-  @Override
   public String getName() {
     return name;
   }
 
-  /**
-   * Method to set this Product's manufacturer.
-   *
-   * @param newManu The new manufacturer for this Product.
-   */
-  @Override
   public void setManufacturer(String newManu) {
     manufacturer = newManu;
   }
 
-  /**
-   * Method to retrieve this Product's manufacturer.
-   *
-   * @return This Product's manufacturer.
-   */
-  @Override
   public String getManufacturer() {
     return manufacturer;
   }
 
-  /**
-   * Method to set this Product's type.
-   *
-   * @param newType The new type for this Product.
-   */
-  @Override
   public void setType(ItemType newType) {
     type = newType;
   }
 
-  /**
-   * Method to retrieve this Product's type.
-   *
-   * @return This Product's type.
-   */
-  @Override
   public ItemType getType() {
     return type;
   }
